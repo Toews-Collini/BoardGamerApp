@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,6 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-}
+}*/
 
 

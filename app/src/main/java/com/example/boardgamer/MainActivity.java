@@ -34,20 +34,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);;
+        setContentView(R.layout.activity_login);
 
         supa = new SupabaseClient();
 
-        inputEmail = findViewById(R.id.inputEmail);
-        inputPassword = findViewById(R.id.inputPassword);
-        btnRegister = findViewById(R.id.btnRegister);
-        progress = findViewById(R.id.progress);
-        btnSignIn = findViewById(R.id.btnSignIn);
-        btnPasswordForgotten = findViewById(R.id.btnPasswordForgotten);
+        inputEmail = findViewById(R.id.editInputEmail);
+        inputPassword = findViewById(R.id.editInputPassword);
+       // btnRegister = findViewById(R.id.btnRegister);
+       // progress = findViewById(R.id.progress);
+        btnSignIn = findViewById(R.id.loginButton);
+       // btnPasswordForgotten = findViewById(R.id.btnPasswordForgotten);
 
-        btnRegister.setOnClickListener(v -> registerUser());
+      //  btnRegister.setOnClickListener(v -> registerUser());
         btnSignIn.setOnClickListener(v -> signIn());
-        btnPasswordForgotten.setOnClickListener(v -> loadPasswordForgottenActivity());
+      //  btnPasswordForgotten.setOnClickListener(v -> loadPasswordForgottenActivity());
     }
 
     private final ActivityResultLauncher<Intent> launcher =
