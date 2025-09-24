@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "BoardGamer"
 include(":app")
- 
+include(":app")

@@ -4,6 +4,8 @@ public class Essen {
     String essensrichtung;
     String Essen;
 
+    Spieler spieler;
+
     public String getEssensrichtung() {
         return essensrichtung;
     }
