@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
     <style name="Base.Theme.BoardGamer" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <!-- Optional: Falls du Material Components benutzt und active indicator ändern willst -->
+        <!-- <item name="colorSecondaryContainer">@color/mid_blue</item> -->
     </style>
 
     <style name="Theme.BoardGamer" parent="Base.Theme.BoardGamer" />
+
+    <style name="Theme.BoardGamerApp" parent="android:Theme.Material.Light.NoActionBar" />
+
 </resources>
