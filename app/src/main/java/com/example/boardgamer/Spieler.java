@@ -12,7 +12,7 @@ public class Spieler {
         return name;
     }
 
-    public void setAme(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 }
