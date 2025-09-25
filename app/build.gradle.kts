@@ -73,7 +73,7 @@ dependencies {
     implementation(libs.appcompat.v151)
     implementation(libs.constraintlayout.v213)
 
-    //MEIN E EINTRÄGE:
+    //MEINE EINTRÄGE:
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.code.gson:gson:2.11.0")
 }
