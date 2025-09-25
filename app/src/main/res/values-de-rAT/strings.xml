@@ -17,14 +17,14 @@
     <string name="userIcon">Benutzer Icon</string>
     <string name="nextGameNight">"Nächster Spieleabend: "</string>
     <string name="upcomingGameNights">"Bevorstehende Spieleabende: "</string>
-    <string name="newGameNightButton">"Neuen Spieleabend anlegen: "</string>
+    <string name="newGameNightButton">Neuen Spieleabend anlegen</string>
     <string name="home">Home</string>
     <string name="messages">Nachrichten</string>
     <string name="settings">Einstellungen</string>
     <string name="gameNightDate">Spieleabend-Datum:</string>
     <string name="gameNightLocation">"Spieleabend-Ort: "</string>
     <string name="gameNightHost">Spieleabend-Gastgeber:</string>
-    <string name="gameNightDetailsButton">Hier geht\'s zu den Details</string>
+    <string name="gameNightDetailsButton">Details ansehen</string>
     <string name="slider_image">Slider Foto</string>
     <string name="name_hint">Name eingeben</string>
     <string name="postcode_hint">PLZ eingeben</string>
