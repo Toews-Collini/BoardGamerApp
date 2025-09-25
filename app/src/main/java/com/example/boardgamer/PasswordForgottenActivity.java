@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/* package com.example.boardgamer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -180,4 +180,4 @@ public class PasswordForgottenActivity extends AppCompatActivity {
     }
 
     private void ui(Runnable r) { runOnUiThread(r); }
-}
+} */

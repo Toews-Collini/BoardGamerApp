@@ -3,9 +3,6 @@
     <!-- TODO: Remove or change this placeholder text -->
 
 
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -16,8 +13,23 @@
     <string name="email_hint">Enter Email</string>
     <string name="password">Password</string>
     <string name="password_hint">Enter Password</string>
-    <string name="registration">Don\'t have an account? Register now</string>
+    <string name="btnRegistration">Register new account</string>
+    <string name ="signUpText"> Sign up here and start organizing your Game Nights</string>
+    <string name="name_hint">Enter Name</string>
+    <string name="postcode_hint">Enter Postcode</string>
+    <string name="city_hint">Enter City</string>
+    <string name="street_hint">Enter Street</string>
+    <string name="sign_up">Sign Up</string>
     <string name="copyright">© 2025 Board Gamer App</string>
+    <string name="error_invalidLogin">Enter Email and Password</string>
+    <string name="success_login_successful">Login successful</string>
+    <string name="error_login_failed">Login failed</string>
+    <string name="error_network_server">Network/server error</string>
+    <string name="success_registration_successful">Registration successful</string>
+    <string name="error_registration_failed">Registration failed</string>
+    <string name="url">Header/key incorrect or incorrect project URL</string>
+    <string name="error_mail_already_exists">Email address already exists</string>
+    <string name="error_mail">Email address already in use or password too short (at least 6 characters)</string>
 
     <string name="userIcon">User Icon</string>
     <string name="nextGameNight">Next Game Night</string>
@@ -31,6 +43,10 @@
     <string name="gameNightHost"> Game Night Host: </string>
     <string name= "gameNightDetailsButton"> More Details here </string>
     <string name ="slider_image"> Slider Image</string>
+    <string name="error_all_files_filled_out">Please fill out all fields</string>
+    <string name="success_profile_created">Profile created</string>
+    <string name="error_profile_creation_failed">Creating the profile failed</string>
+    <string name="error_name_already_taken">Name is already taken</string>
 
 
 </resources>

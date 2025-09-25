@@ -50,8 +50,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         btnSignUp.setOnClickListener(v -> {
             if (name.getText().toString().trim().isEmpty() || plz.getText().toString().trim().isEmpty() || city.getText().toString().trim().isEmpty() || street.getText().toString().trim().isEmpty()) {
-                Toast.makeText(this, "Bitte alle Felder ausfüllen!", Toast.LENGTH_SHORT).show();
-                Log.v("Adresse","Bitte alle Felder ausfüllen!");
+                Toast.makeText(this, getString(R.string.error_all_files_filled_out), Toast.LENGTH_SHORT).show();
+                Log.v("Adresse",getString(R.string.error_all_files_filled_out));
                 return;
             }
 
@@ -67,16 +67,16 @@ public class SignUpActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (signedIn) {
-                        Toast.makeText(this,"Anmeldung erfolgreich",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,getString(R.string.success_login_successful),Toast.LENGTH_SHORT).show();
                         // Optional: Direkt einloggen (falls E-Mail-Bestätigung deaktiviert ist)
                     } else {
-                        Toast.makeText(this,"Anmeldung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,getString(R.string.error_login_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
 
             } catch (IOException e) {
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Netzwerk-/Serverfehler", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_network_server), Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -92,22 +92,22 @@ public class SignUpActivity extends AppCompatActivity {
                 String resultJson = supa.callRpc("create_spieler_mit_adresse", args);
 
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Profil angelegt", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.success_profile_created), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             } catch (IOException e) {
                 final int code = supa.errorCode;
                 final String body = supa.lastErrorBody;
                 runOnUiThread(() -> {
-                    Toast.makeText(this,"Anlegen des Profils fehlgeschlagen!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,getString(R.string.error_profile_creation_failed),Toast.LENGTH_LONG).show();
                     Log.v("Login", "(" + code + "): " + body);
                         if (SupabaseClient.errorCode == 409) {
-                            Toast.makeText(this, "Name ist bereits vergeben!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this,getString(R.string.error_name_already_taken) , Toast.LENGTH_SHORT).show();
                         }
                     }
                 );
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(this, "Fehler: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         });
     }

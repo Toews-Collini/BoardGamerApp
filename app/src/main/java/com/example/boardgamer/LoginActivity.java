@@ -1,62 +1,208 @@
-/*package com.example.boardgamer;
+package com.example.boardgamer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText editInputEmail;
-    private EditText editInputPassword;
-    private Button loginButton;
+    private SupabaseClient supa;
+    private ExecutorService io = Executors.newSingleThreadExecutor();
+
+    private EditText inputEmail, inputPassword;
+    private Button btnRegister;
+    private Button btnSignIn;
+    private Button btnPasswordForgotten;
+
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        editInputEmail = findViewById(R.id.editInputEmail);
-        editInputPassword = findViewById(R.id.editInputPassword);
-        loginButton = findViewById(R.id.loginButton);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onLoginClicked();
-            }
+        supa = new SupabaseClient();
 
-        });
+        inputEmail = findViewById(R.id.editInputEmail);
+        inputPassword = findViewById(R.id.editInputPassword);
+        btnRegister = findViewById(R.id.btnRegister);
+        progress = findViewById(R.id.progress);
+        btnSignIn = findViewById(R.id.loginButton);
+        // btnPasswordForgotten = findViewById(R.id.btnPasswordForgotten);
+
+        btnRegister.setOnClickListener(v -> registerUser());
+        btnSignIn.setOnClickListener(v -> signIn());
+        //  btnPasswordForgotten.setOnClickListener(v -> loadPasswordForgottenActivity());
     }
 
-    private void onLoginClicked() {
-        String email = editInputEmail.getText().toString();
-        String password = editInputPassword.getText().toString();
+    private final ActivityResultLauncher<Intent> launcher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    String value = result.getData().getStringExtra("result");
+                }
+            });
 
-       if (email.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, "Test Fehler - versuche es erneut", Toast.LENGTH_SHORT).show();
+   /* private void loadPasswordForgottenActivity() {
+        Intent i = new Intent(this, PasswordForgottenActivity.class);
+        launcher.launch(i);
+    } */
 
-        } else {
-           Toast.makeText(this, "Erfolg", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+    private void signIn() {
+        final String email = inputEmail.getText().toString().trim();
+        final String password = inputPassword.getText().toString();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, getString(R.string.error_invalidLogin), Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        setLoading(true);
+
+        io.execute(() -> {
+            try {
+                // 1) Signup aufrufen
+                boolean signedIn = supa.signInWithPassword(email, password);
+
+                runOnUiThread(() -> {
+                    if (signedIn) {
+                        Toast.makeText(this, getString(R.string.success_login_successful), Toast.LENGTH_SHORT).show();
+                        // Optional: Direkt einloggen (falls E-Mail-Bestätigung deaktiviert ist)
+                    } else {
+                        setLoading(false);
+                        Toast.makeText(this, getString(R.string.error_login_failed), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (IOException e) {
+                runOnUiThread(() -> {
+                    setLoading(false);
+                    Toast.makeText(this, getString(R.string.error_network_server), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
     }
-}*/
 
+    private void registerUser() {
+        final String email = inputEmail.getText().toString().trim();
+        final String password = inputPassword.getText().toString();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, getString(R.string.error_invalidLogin), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        setLoading(true);
+
+        io.execute(() -> {
+            try {
+                // 1) Signup aufrufen
+                boolean signedUp = supa.signUp(email, password);
+
+                runOnUiThread(() -> {
+                    if (signedUp) {
+                        Toast.makeText(this, getString(R.string.success_registration_successful), Toast.LENGTH_SHORT).show();
+
+                        Intent i = new Intent(this, SignUpActivity.class);
+                        i.putExtra("email", inputEmail.getText().toString().trim());
+                        i.putExtra("password", inputPassword.getText().toString());
+                        setResult(Activity.RESULT_OK, i);
+                        launcher.launch(i);
+                    } else {
+                        setLoading(false);
+                        if (supa.errorCode == 401 || supa.errorCode == 403) {
+                            Toast.makeText(this, getString(R.string.url), Toast.LENGTH_SHORT).show();
+                        }
+                        if (supa.errorCode == 400) {
+                            Toast.makeText(this, getString(R.string.error_mail_already_exists), Toast.LENGTH_SHORT).show();
+                        }
+                        if (supa.errorCode == 422) {
+                            Toast.makeText(this, getString(R.string.error_mail), Toast.LENGTH_SHORT).show();
+                        }
+
+                        Toast.makeText(this, getString(R.string.error_registration_failed), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (IOException e) {
+                runOnUiThread(() -> {
+                    setLoading(false);
+                    Toast.makeText(this, getString(R.string.error_network_server), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    private void setLoading(boolean loading) {
+        progress.setVisibility(loading ? View.VISIBLE : View.GONE);
+        btnRegister.setEnabled(!loading);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        io.shutdownNow();
+    }
+}
+
+/*
+    ArrayList<Spieleabend> anzeigenNächsteSpieleabende() {
+        ArrayList<Spieleabend> spieleabendListe = new ArrayList<>();
+
+        return spieleabendListe;
+    }
+
+    void befürwortenSpielFürSpieleabend(String spiel, Spieler spieler, Spieleabend spielabend) {
+        spielabend.spielListe.putIfAbsent(spiel, new HashSet<>());
+        spielabend.spielListe.get(spiel).add(spieler);
+    }
+
+    void absagenSpielFürSpieleabend(String spiel, Spieler spieler, Spieleabend spielabend) {
+        spielabend.spielListe.get(spiel).remove(spieler);
+    }
+
+    void bewertenGastgeber(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
+        Bewertung bewertung = new Bewertung();
+        bewertung.sterne = sterne;
+        bewertung.bewertung = kommentar;
+        spielabend.gastgeberBewertung.put(spieler, bewertung);
+    }
+
+    void bewertenEssen(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
+        Bewertung bewertung = new Bewertung();
+        bewertung.sterne = sterne;
+        bewertung.bewertung = kommentar;
+        spielabend.essenBewertung.put(spieler, bewertung);
+    }
+
+    void bewertenAbend(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
+        Bewertung bewertung = new Bewertung();
+        bewertung.sterne = sterne;
+        bewertung.bewertung = kommentar;
+        spielabend.abendBewertung.put(spieler, bewertung);
+    }
+
+    void sendenSpielerNachricht(Spieler spieler, String nachricht) {
+        spieler.nachrichten.add(nachricht);
+    }
+
+    ArrayList<String> anzeigenSpielerNachrichten(Spieler spieler) {
+        return spieler.nachrichten;
+    }
+}
+
+ */
