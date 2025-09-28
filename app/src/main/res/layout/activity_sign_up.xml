@@ -18,7 +18,7 @@
             android:id="@+id/logo"
             android:layout_width="109dp"
             android:layout_height="98dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="70dp"
             android:contentDescription="@string/app_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,16 +27,15 @@
 
         <TextView
             android:id="@+id/signUpText"
-            android:layout_width="276dp"
-            android:layout_height="84dp"
-            android:layout_marginTop="44dp"
+            android:layout_width="331dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
             android:text="@string/signUpText"
             android:textColor="@color/mid_blue"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo" />
 

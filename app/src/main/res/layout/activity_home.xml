@@ -24,8 +24,8 @@
 
     <ImageView
         android:id="@+id/userIcon"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="45dp"
         android:contentDescription="@string/userIcon"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,7 +104,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/gameNightHost"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary" />
@@ -176,7 +176,7 @@
                     android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/tvDate1"
+                        android:id="@+id/gameNight1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
@@ -184,14 +184,14 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvLocation1"
+                        android:id="@+id/gameNight2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="Ort: Musterstraße 12, Berlin" />
 
                     <TextView
-                        android:id="@+id/tvHost1"
+                        android:id="@+id/gameNight3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"

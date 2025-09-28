@@ -45,6 +45,11 @@
             android:name=".MessagesActivity"
             android:exported="true"
             android:theme="@style/Theme.BoardGamer" />
+
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
     </application>
 
 </manifest>

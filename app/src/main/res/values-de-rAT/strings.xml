@@ -11,12 +11,12 @@
     <string name="password">Passwort</string>
     <string name="password_hint">Passwort eingeben</string>
     <string name="btnRegistration">Neues Konto registrieren</string>
-    <string name="signUpText">Registriere dich hier und starte die Spieleabend-Organisation</string>
+    <string name="signUpText">Registriere dich und starte die Spieleabend-Organisation</string>
     <string name="sign_up">Registrieren</string>
     <string name="copyright">© 2025 Board Gamer App</string>
     <string name="userIcon">Benutzer Icon</string>
-    <string name="nextGameNight">"Nächster Spieleabend: "</string>
-    <string name="upcomingGameNights">"Bevorstehende Spieleabende: "</string>
+    <string name="nextGameNight">Nächster Spieleabend</string>
+    <string name="upcomingGameNights">"Bevorstehende Spieleabende "</string>
     <string name="newGameNightButton">Neuen Spieleabend anlegen</string>
     <string name="home">Home</string>
     <string name="messages">Nachrichten</string>
@@ -25,7 +25,6 @@
     <string name="gameNightLocation">"Spieleabend-Ort: "</string>
     <string name="gameNightHost">Spieleabend-Gastgeber:</string>
     <string name="gameNightDetailsButton">Details ansehen</string>
-    <string name="slider_image">Slider Foto</string>
     <string name="name_hint">Name eingeben</string>
     <string name="postcode_hint">PLZ eingeben</string>
     <string name="city_hint">Ort eingeben</string>
@@ -43,4 +42,9 @@
     <string name="success_profile_created">Profil angelegt</string>
     <string name="error_profile_creation_failed">Anlegen des Profils fehlgeschlagen</string>
     <string name="error_name_already_taken">Name ist bereits vergeben</string>
+    <string name="gameNightDetails">Spieleabend-Details</string>
+    <string name="btnVoting">Voting</string>
+    <string name="btnDinner">Essen</string>
+    <string name="btnRating">Bewertung</string>
+    <string name="btnSuggestions">Vorschläge</string>
 </resources>

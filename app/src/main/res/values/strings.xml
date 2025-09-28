@@ -14,7 +14,7 @@
     <string name="password">Password</string>
     <string name="password_hint">Enter Password</string>
     <string name="btnRegistration">Register new account</string>
-    <string name ="signUpText"> Sign up here and start organizing your Game Nights</string>
+    <string name ="signUpText">Sign up and start organizing your Game Nights</string>
     <string name="name_hint">Enter Name</string>
     <string name="postcode_hint">Enter Postcode</string>
     <string name="city_hint">Enter City</string>
@@ -42,11 +42,15 @@
     <string name="gameNightLocation"> Game Night Location: </string>
     <string name="gameNightHost"> Game Night Host: </string>
     <string name= "gameNightDetailsButton">View details</string>
-    <string name ="slider_image"> Slider Image</string>
     <string name="error_all_files_filled_out">Please fill out all fields</string>
     <string name="success_profile_created">Profile created</string>
     <string name="error_profile_creation_failed">Creating the profile failed</string>
     <string name="error_name_already_taken">Name is already taken</string>
+    <string name="gameNightDetails">Game Night Details</string>
+    <string name="btnVoting">Voting</string>
+    <string name="btnDinner">Dinner</string>
+    <string name="btnRating">Rating</string>
+    <string name="btnSuggestions">Suggestions</string>
 
 
 </resources>
