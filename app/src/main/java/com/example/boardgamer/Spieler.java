@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 import java.util.ArrayList;
 
@@ -15,4 +15,4 @@ public class Spieler {
     public void setName(String name) {
         this.name = name;
     }
-}
+}*/

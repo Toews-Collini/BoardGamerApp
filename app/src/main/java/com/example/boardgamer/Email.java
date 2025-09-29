@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 public class Email {
     String email;
@@ -10,4 +10,4 @@ public class Email {
     public void setEmail(String email) {
         this.email = email;
     }
-}
+}*/

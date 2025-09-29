@@ -47,4 +47,7 @@
     <string name="btnDinner">Essen</string>
     <string name="btnRating">Bewertung</string>
     <string name="btnSuggestions">Vorschläge</string>
+    <string name="add_suggestions">Hinzufügen</string>
+    <string name="newSuggestion">Neuer Vorschlag</string>
+    <string name="suggestionText">Füge hier deine Spiele-Vorschläge hinzu</string>
 </resources>

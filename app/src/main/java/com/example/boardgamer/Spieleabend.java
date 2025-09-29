@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,4 +12,4 @@ public class Spieleabend {
     HashMap<Spieler, Bewertung> gastgeberBewertung = new HashMap<>();
     HashMap<Spieler, Bewertung> essenBewertung = new HashMap<>();
     HashMap<Spieler, Bewertung> abendBewertung = new HashMap<>();
-}
+}*/
