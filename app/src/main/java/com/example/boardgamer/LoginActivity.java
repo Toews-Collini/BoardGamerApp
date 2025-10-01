@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
     private Button btnRegister;
     private Button btnSignIn;
-    private Button btnPasswordForgotten;
 
     private ProgressBar progress;
 
@@ -43,11 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         progress = findViewById(R.id.progress);
         btnSignIn = findViewById(R.id.loginButton);
-        // btnPasswordForgotten = findViewById(R.id.btnPasswordForgotten);
 
         btnRegister.setOnClickListener(v -> registerUser());
         btnSignIn.setOnClickListener(v -> signIn());
-        //  btnPasswordForgotten.setOnClickListener(v -> loadPasswordForgottenActivity());
     }
 
     private final ActivityResultLauncher<Intent> launcher =
@@ -56,11 +53,6 @@ public class LoginActivity extends AppCompatActivity {
                     String value = result.getData().getStringExtra("result");
                 }
             });
-
-   /* private void loadPasswordForgottenActivity() {
-        Intent i = new Intent(this, PasswordForgottenActivity.class);
-        launcher.launch(i);
-    } */
 
     private void signIn() {
         final String email = inputEmail.getText().toString().trim();
@@ -81,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (signedIn) {
                         Toast.makeText(this, getString(R.string.success_login_successful), Toast.LENGTH_SHORT).show();
-                        // Optional: Direkt einloggen (falls E-Mail-Bestätigung deaktiviert ist)
+
                     } else {
                         setLoading(false);
                         Toast.makeText(this, getString(R.string.error_login_failed), Toast.LENGTH_SHORT).show();

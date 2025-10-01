@@ -54,6 +54,11 @@
     <string name="add_suggestions">Add</string>
     <string name="newSuggestion">New Suggestion</string>
     <string name="suggestionText">Add your Game Suggestions here</string>
+    <string name="votingText">Vote for game suggestions here</string>
+    <string name="votingList">Voting list</string>
+    <string name="thumbsUp">Thumbs up</string>
+    <string name="neutral">Neutral</string>
+    <string name="thumbsDown">Thumbs down</string>
 
 
 </resources>
