@@ -8,11 +8,13 @@
     android:background="@color/background_blue"
     tools:context=".VotingActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"
         android:layout_height="729dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
@@ -60,92 +62,45 @@
             app:layout_constraintVertical_bias="0.201" />
 
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="325dp"
-            android:layout_height="368dp"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/votingText"
-            app:layout_constraintVertical_bias="0.189">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/votingList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/votingList" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/icon_one"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/thumbsUp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/thumbs_up" />
-
-                    <ImageButton
-                        android:id="@+id/icon_two"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/neutral"
-                        android:rotation="90"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/thumbs_up" />
-
-                    <ImageButton
-                        android:id="@+id/icon_three"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/thumbsDown"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/thumbs_down" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="9dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/previous"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/votingRecyclerView"
+            android:layout_width="335dp"
+            android:layout_height="381dp"
             android:padding="8dp"
-            android:src="@drawable/arrow_back"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.091"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/votingText"
-            app:layout_constraintVertical_bias="0.957" />
+            app:layout_constraintVertical_bias="0.141" />
+
+        <Button
+            android:id="@+id/saveVoting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/save_voting"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/votingRecyclerView"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/previous"
+        android:padding="8dp"
+        android:src="@drawable/arrow_back"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.957" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
@@ -168,4 +123,3 @@
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
