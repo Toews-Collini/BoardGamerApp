@@ -34,6 +34,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--set all exported to false after testing-->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".MessagesActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".DinnerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".RatingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".VotingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+        <activity
+            android:name=".SuggestionsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
     </application>
 
 </manifest>

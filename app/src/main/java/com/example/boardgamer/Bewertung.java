@@ -1,6 +1,6 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 public class Bewertung {
     int sterne;
     String bewertung;
-}
+}*/

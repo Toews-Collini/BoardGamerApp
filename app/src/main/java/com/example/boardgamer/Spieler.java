@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 import com.google.gson.annotations.SerializedName;
 

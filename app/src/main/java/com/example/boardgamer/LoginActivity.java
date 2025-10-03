@@ -3,7 +3,6 @@ package com.example.boardgamer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -27,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnRegister;
     private Button btnSignIn;
 
+    private ProgressBar progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +38,11 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = findViewById(R.id.editInputEmail);
         inputPassword = findViewById(R.id.editInputPassword);
         btnRegister = findViewById(R.id.btnRegister);
+        progress = findViewById(R.id.progress);
         btnSignIn = findViewById(R.id.loginButton);
 
         btnRegister.setOnClickListener(v -> registerUser());
         btnSignIn.setOnClickListener(v -> signIn());
-        //  btnPasswordForgotten.setOnClickListener(v -> loadPasswordForgottenActivity());
     }
 
     private final ActivityResultLauncher<Intent> launcher =
@@ -56,9 +57,11 @@ public class LoginActivity extends AppCompatActivity {
         final String password = inputPassword.getText().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "E-Mail und Passwort eingeben.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_invalidLogin), Toast.LENGTH_SHORT).show();
             return;
         }
+
+        setLoading(true);
 
         io.execute(() -> {
             try {
@@ -67,19 +70,20 @@ public class LoginActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (signedIn) {
-                        Toast.makeText(this,"Anmeldung erfolgreich",Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(this, HomeActivity.class);
                         setResult(Activity.RESULT_OK, i);
                         launcher.launch(i);
-
+                        Toast.makeText(this, getString(R.string.success_login_successful), Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this,"Anmeldung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
+                        setLoading(false);
+                        Toast.makeText(this, getString(R.string.error_login_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
 
             } catch (IOException e) {
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Netzwerk-/Serverfehler", Toast.LENGTH_SHORT).show();
+                    setLoading(false);
+                    Toast.makeText(this, getString(R.string.error_network_server), Toast.LENGTH_SHORT).show();
                 });
             }
         });
@@ -90,9 +94,10 @@ public class LoginActivity extends AppCompatActivity {
         final String password = inputPassword.getText().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "E-Mail und Passwort eingeben.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_invalidLogin), Toast.LENGTH_SHORT).show();
             return;
         }
+        setLoading(true);
 
         io.execute(() -> {
             try {
@@ -101,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (signedUp) {
-                        Toast.makeText(this,"Registrierung erfolgreich",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.success_registration_successful), Toast.LENGTH_SHORT).show();
 
                         Intent i = new Intent(this, SignUpActivity.class);
                         i.putExtra("email", inputEmail.getText().toString().trim());
@@ -109,26 +114,33 @@ public class LoginActivity extends AppCompatActivity {
                         setResult(Activity.RESULT_OK, i);
                         launcher.launch(i);
                     } else {
+                        setLoading(false);
                         if (supa.errorCode == 401 || supa.errorCode == 403) {
-                            Toast.makeText(this,"Header/Key falsch oder falsche Projekt-URL", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.url), Toast.LENGTH_SHORT).show();
                         }
                         if (supa.errorCode == 400) {
-                            Toast.makeText(this,"E-Mailadresse schon vorhanden!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.error_mail_already_exists), Toast.LENGTH_SHORT).show();
                         }
                         if (supa.errorCode == 422) {
-                            Toast.makeText(this,"Email-Adresse bereits vergeben oder Passwort zu kurz (mind. 6 Zeichen)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.error_mail), Toast.LENGTH_SHORT).show();
                         }
 
-                        Toast.makeText(this,"Registrierung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.error_registration_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
 
             } catch (IOException e) {
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Netzwerk-/Serverfehler", Toast.LENGTH_SHORT).show();
+                    setLoading(false);
+                    Toast.makeText(this, getString(R.string.error_network_server), Toast.LENGTH_SHORT).show();
                 });
             }
         });
+    }
+
+    private void setLoading(boolean loading) {
+        progress.setVisibility(loading ? View.VISIBLE : View.GONE);
+        btnRegister.setEnabled(!loading);
     }
 
     @Override

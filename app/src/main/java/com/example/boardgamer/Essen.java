@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 public class Essen {
     String essensrichtung;
@@ -13,4 +13,4 @@ public class Essen {
     public void setEssensrichtung(String essensrichtung) {
         this.essensrichtung = essensrichtung;
     }
-}
+}*/

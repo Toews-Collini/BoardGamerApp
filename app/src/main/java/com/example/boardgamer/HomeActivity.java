@@ -1,5 +1,6 @@
 package com.example.boardgamer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.boardgamer.databinding.ActivityHomeBinding;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
     ActivityHomeBinding binding;
@@ -30,6 +33,23 @@ public class HomeActivity extends AppCompatActivity {
                 replaceFragment(new SettingsFragment());
             }
             return true;
+        });
+
+
+        //@Eduard: for bottom nav menu - changing pages - need to add that on every page which includes bottom nav
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                return true;
+            } else if (id == R.id.messages) {
+                startActivity(new Intent(this, MessagesActivity.class));
+                return true;
+            } else if (id == R.id.settings) {
+                return true;
+            }
+            return false;
         });
     }
     private void replaceFragment (Fragment fragment){

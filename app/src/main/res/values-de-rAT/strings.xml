@@ -50,4 +50,10 @@
     <string name="add_suggestions">Hinzufügen</string>
     <string name="newSuggestion">Neuer Vorschlag</string>
     <string name="suggestionText">Füge hier deine Spiele-Vorschläge hinzu</string>
+    <string name="votingText">Stimme hier über Spielvorschläge ab</string>
+    <string name="votingList">Voting Liste</string>
+    <string name="thumbsUp">Daumen hoch</string>
+    <string name="neutral">Neutral</string>
+    <string name="thumbsDown">Daumen runter</string>
+    <string name="save_voting">Votings speichern</string>
 </resources>

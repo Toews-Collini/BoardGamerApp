@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 import java.util.ArrayList;
 
@@ -25,4 +25,4 @@ public class Lieferdienst {
     public void setTelnr(String telnr) {
         this.telnr = telnr;
     }
-}
+}*/

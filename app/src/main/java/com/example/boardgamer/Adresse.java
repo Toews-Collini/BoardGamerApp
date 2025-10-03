@@ -1,4 +1,4 @@
-package com.example.boardgamer;
+/*package com.example.boardgamer;
 
 public class Adresse {
     String strasse;
@@ -28,4 +28,4 @@ public class Adresse {
     public void setPlz(String plz) {
         this.plz = plz;
     }
-}
+}*/
