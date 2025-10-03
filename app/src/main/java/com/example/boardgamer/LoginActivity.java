@@ -12,10 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private ExecutorService io = Executors.newSingleThreadExecutor();
 
     private EditText inputEmail, inputPassword;
-    private TextView btnRegister;
+    private Button btnRegister;
     private Button btnSignIn;
 
     @Override
@@ -38,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
         inputEmail = findViewById(R.id.editInputEmail);
         inputPassword = findViewById(R.id.editInputPassword);
-        btnRegister = findViewById(R.id.textViewRegister);
+        btnRegister = findViewById(R.id.btnRegister);
         btnSignIn = findViewById(R.id.loginButton);
 
         btnRegister.setOnClickListener(v -> registerUser());
@@ -70,6 +68,10 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (signedIn) {
                         Toast.makeText(this,"Anmeldung erfolgreich",Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(this, HomeActivity.class);
+                        setResult(Activity.RESULT_OK, i);
+                        launcher.launch(i);
+
                     } else {
                         Toast.makeText(this,"Anmeldung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
                     }
@@ -135,51 +137,3 @@ public class LoginActivity extends AppCompatActivity {
         io.shutdownNow();
     }
 }
-
-/*
-    ArrayList<Spieleabend> anzeigenNächsteSpieleabende() {
-        ArrayList<Spieleabend> spieleabendListe = new ArrayList<>();
-
-        return spieleabendListe;
-    }
-
-    void befürwortenSpielFürSpieleabend(String spiel, Spieler spieler, Spieleabend spielabend) {
-        spielabend.spielListe.putIfAbsent(spiel, new HashSet<>());
-        spielabend.spielListe.get(spiel).add(spieler);
-    }
-
-    void absagenSpielFürSpieleabend(String spiel, Spieler spieler, Spieleabend spielabend) {
-        spielabend.spielListe.get(spiel).remove(spieler);
-    }
-
-    void bewertenGastgeber(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
-        Bewertung bewertung = new Bewertung();
-        bewertung.sterne = sterne;
-        bewertung.bewertung = kommentar;
-        spielabend.gastgeberBewertung.put(spieler, bewertung);
-    }
-
-    void bewertenEssen(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
-        Bewertung bewertung = new Bewertung();
-        bewertung.sterne = sterne;
-        bewertung.bewertung = kommentar;
-        spielabend.essenBewertung.put(spieler, bewertung);
-    }
-
-    void bewertenAbend(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
-        Bewertung bewertung = new Bewertung();
-        bewertung.sterne = sterne;
-        bewertung.bewertung = kommentar;
-        spielabend.abendBewertung.put(spieler, bewertung);
-    }
-
-    void sendenSpielerNachricht(Spieler spieler, String nachricht) {
-        spieler.nachrichten.add(nachricht);
-    }
-
-    ArrayList<String> anzeigenSpielerNachrichten(Spieler spieler) {
-        return spieler.nachrichten;
-    }
-}
-
- */

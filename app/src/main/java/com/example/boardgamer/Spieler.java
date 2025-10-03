@@ -1,18 +1,11 @@
 package com.example.boardgamer;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 public class Spieler {
-    String name;
-    Adresse adresse;
-    Email emailAdresse;
-    ArrayList<String> nachrichten = new ArrayList<>();
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @SerializedName("name") public String name;
+    @SerializedName("adresse") public long adresse;
+    @SerializedName("email") public String email;
 }

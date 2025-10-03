@@ -15,23 +15,24 @@
         android:theme="@style/Theme.BoardGamer"
         tools:targetApi="30">
         <activity
+            android:name=".CreateGameNightActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignUpActivity"
             android:exported="false"
-            android:theme="@style/Theme.BoardGamer">
-
-        </activity>
-        <activity
-            android:name=".PasswordForgottenActivity"
-            android:exported="false" />
+            android:theme="@style/Theme.BoardGamer" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.BoardGamer">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
