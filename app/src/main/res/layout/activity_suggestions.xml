@@ -66,6 +66,7 @@
             android:layout_height="139dp"
             android:clipToPadding="false"
             android:padding="8dp"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toTopOf="@id/inputForm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

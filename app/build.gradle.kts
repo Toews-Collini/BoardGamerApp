@@ -37,6 +37,7 @@ android {
         jvmTarget = "11" // Stelle sicher, dass Kotlin die gleiche JVM-Version wie Java verwendet
     }
     buildFeatures {
+        dataBinding = true
         compose = true
         viewBinding = true
     }

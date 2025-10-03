@@ -88,6 +88,7 @@
 
 
                 <TextView
+                    android:id="@+id/gameNightDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/gameNightDate"
@@ -96,6 +97,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/gameNightLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -104,6 +106,7 @@
                     android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
+                    android:id="@+id/gameNightHost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -118,12 +121,27 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imgBtnPrevious"
+                    android:layout_width="43dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:drawable/ic_media_previous" />
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/gameNightDetailsButton" />
+
+                <ImageButton
+                    android:id="@+id/imgBtnNext"
+                    android:layout_width="44dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:drawable/ic_media_next" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -135,7 +153,7 @@
         android:id="@+id/upcomingGameNights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="219dp"
+        android:layout_marginTop="232dp"
         android:gravity="center"
         android:text="@string/upcomingGameNights"
         android:textColor="@color/black"
@@ -150,7 +168,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="388dp"
+        android:layout_marginTop="400dp"
         android:layout_marginEnd="16dp"
         android:padding="16dp"
         android:scrollbars="none"
@@ -182,7 +200,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="Datum: 25.09.2025"
+                        android:text=""
                         android:textStyle="bold" />
 
                     <TextView
@@ -190,14 +208,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="Ort: Musterstraße 12, Berlin" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/gameNight3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="Gastgeber: Max Mustermann" />
+                        android:text="" />
 
 
                 </LinearLayout>
@@ -222,7 +240,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="Datum: 26.09.2025"
+                        android:text=""
                         android:textStyle="bold" />
 
                     <TextView
@@ -230,14 +248,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="Ort: Beispielweg 8, Hamburg" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/tvHost2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="Gastgeber: Lisa Müller" />
+                        android:text="" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -260,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="Datum: 27.09.2025"
+                        android:text=""
                         android:textStyle="bold" />
 
                     <TextView
@@ -268,14 +286,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="Ort: Zoom" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/tvHost3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="Gastgeber: Tom Schmidt" />
+                        android:text="" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

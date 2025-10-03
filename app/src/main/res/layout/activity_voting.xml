@@ -8,7 +8,6 @@
     android:background="@color/background_blue"
     tools:context=".VotingActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"
         android:layout_height="729dp"

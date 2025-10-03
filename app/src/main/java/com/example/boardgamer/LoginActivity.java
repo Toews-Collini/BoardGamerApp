@@ -11,10 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -72,8 +70,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (signedIn) {
+                        Intent i = new Intent(this, HomeActivity.class);
+                        setResult(Activity.RESULT_OK, i);
+                        launcher.launch(i);
                         Toast.makeText(this, getString(R.string.success_login_successful), Toast.LENGTH_SHORT).show();
-
                     } else {
                         setLoading(false);
                         Toast.makeText(this, getString(R.string.error_login_failed), Toast.LENGTH_SHORT).show();
@@ -149,51 +149,3 @@ public class LoginActivity extends AppCompatActivity {
         io.shutdownNow();
     }
 }
-
-/*
-    ArrayList<Spieleabend> anzeigenNächsteSpieleabende() {
-        ArrayList<Spieleabend> spieleabendListe = new ArrayList<>();
-
-        return spieleabendListe;
-    }
-
-    void befürwortenSpielFürSpieleabend(String spiel, Spieler spieler, Spieleabend spielabend) {
-        spielabend.spielListe.putIfAbsent(spiel, new HashSet<>());
-        spielabend.spielListe.get(spiel).add(spieler);
-    }
-
-    void absagenSpielFürSpieleabend(String spiel, Spieler spieler, Spieleabend spielabend) {
-        spielabend.spielListe.get(spiel).remove(spieler);
-    }
-
-    void bewertenGastgeber(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
-        Bewertung bewertung = new Bewertung();
-        bewertung.sterne = sterne;
-        bewertung.bewertung = kommentar;
-        spielabend.gastgeberBewertung.put(spieler, bewertung);
-    }
-
-    void bewertenEssen(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
-        Bewertung bewertung = new Bewertung();
-        bewertung.sterne = sterne;
-        bewertung.bewertung = kommentar;
-        spielabend.essenBewertung.put(spieler, bewertung);
-    }
-
-    void bewertenAbend(Spieler spieler, int sterne, String kommentar, Spieleabend spielabend) {
-        Bewertung bewertung = new Bewertung();
-        bewertung.sterne = sterne;
-        bewertung.bewertung = kommentar;
-        spielabend.abendBewertung.put(spieler, bewertung);
-    }
-
-    void sendenSpielerNachricht(Spieler spieler, String nachricht) {
-        spieler.nachrichten.add(nachricht);
-    }
-
-    ArrayList<String> anzeigenSpielerNachrichten(Spieler spieler) {
-        return spieler.nachrichten;
-    }
-}
-
- */

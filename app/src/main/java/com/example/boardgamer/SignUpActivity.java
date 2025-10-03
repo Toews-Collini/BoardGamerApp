@@ -1,6 +1,7 @@
 package com.example.boardgamer;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -33,7 +36,6 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
 
         Intent intent = getIntent();
@@ -84,6 +86,7 @@ public class SignUpActivity extends AppCompatActivity {
                 // RPC-Argumente
                 com.google.gson.JsonObject args = new com.google.gson.JsonObject();
                 args.addProperty("p_name", name.getText().toString().trim());
+                args.addProperty("p_email", email);
                 args.addProperty("p_plz", plz.getText().toString().trim());
                 args.addProperty("p_ort", city.getText().toString().trim());
                 args.addProperty("p_strasse", street.getText().toString().trim());
@@ -92,8 +95,9 @@ public class SignUpActivity extends AppCompatActivity {
                 String resultJson = supa.callRpc("create_spieler_mit_adresse", args);
 
                 runOnUiThread(() -> {
+                    Intent i = new Intent(this, HomeActivity.class);
+                    launcher.launch(i);
                     Toast.makeText(this, getString(R.string.success_profile_created), Toast.LENGTH_SHORT).show();
-                    finish();
                 });
             } catch (IOException e) {
                 final int code = supa.errorCode;
@@ -111,4 +115,11 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
+    private final ActivityResultLauncher<Intent> launcher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    String value = result.getData().getStringExtra("result");
+                }
+            });
 }

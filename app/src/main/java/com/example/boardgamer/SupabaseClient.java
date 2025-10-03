@@ -127,9 +127,25 @@ public class SupabaseClient {
                 .build();
 
         try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            errorCode = res.code();
+            android.util.Log.d("SupabaseClient SelectAll",
+                    "SELECT " + table + " -> status=" + res.code() + " body=" + body);
+
+            if (!res.isSuccessful()) {
+                this.lastErrorBody = body;
+                throw new IOException("Select " + table + " failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+
+/*
+        try (Response res = http.newCall(req).execute()) {
             if (!res.isSuccessful()) throw new IOException("Select failed: " + res.code());
             return res.body().string(); // JSON Array
         }
+
+ */
     }
 
     // INSERT: /rest/v1/<table>
@@ -225,7 +241,7 @@ public class SupabaseClient {
         try (Response res = http.newCall(req).execute()) {
             this.errorCode = res.code();
             if (!res.isSuccessful()) {
-                throw new IOException("Delete " + table + " failed: " + res.code() + " / " + (res.body()!=null?res.body().string():""));
+                throw new IOException("Delete " + table + " failed: " + res.code() + " / " + (res.body() != null ? res.body().string() : ""));
             }
         }
     }
@@ -250,4 +266,63 @@ public class SupabaseClient {
             return body; // z.B. {"spieler_id":123,"adresse_id":456}
         }
     }
+
+    public String selectHomeActivityView() throws IOException {
+        okhttp3.HttpUrl url = okhttp3.HttpUrl
+                .parse(baseUrl + "/rest/v1/v_spieler_adresse_termin")
+                .newBuilder()
+                .addQueryParameter("select", "name,plz,ort,strasse,termin") // optional, aber klarer
+                .build();
+
+        okhttp3.Request req = new okhttp3.Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("apikey", SupabaseClient.anonKey)
+                .addHeader("Authorization", "Bearer " + SupabaseClient.anonKey)
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (okhttp3.Response res = http.newCall(req).execute()) {
+            this.errorCode = res.code();
+            String body = (res.body() != null) ? res.body().string() : "";
+
+            if (!res.isSuccessful()) {
+                this.lastErrorBody = body; // zum Debuggen merken
+                throw new IOException("HTTP " + res.code() + " on GET v_spieler_adresse_termin");
+            }
+
+            this.lastErrorBody = null;
+            return body;
+        }
+    }
+
+    public String selectLastGastgeberView() throws IOException {
+        okhttp3.HttpUrl url = okhttp3.HttpUrl
+                .parse(baseUrl + "/rest/v1/v_latest_spieltermin_gastgeber")
+                .newBuilder()
+                .addQueryParameter("select", "gastgeber_name") // optional, aber klarer
+                .build();
+
+        okhttp3.Request req = new okhttp3.Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("apikey", SupabaseClient.anonKey)
+                .addHeader("Authorization", "Bearer " + SupabaseClient.anonKey)
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (okhttp3.Response res = http.newCall(req).execute()) {
+            this.errorCode = res.code();
+            String body = (res.body() != null) ? res.body().string() : "";
+
+            if (!res.isSuccessful()) {
+                this.lastErrorBody = body; // zum Debuggen merken
+                throw new IOException("HTTP " + res.code() + " on GET v_latest_spieltermin_gastgeber");
+            }
+
+            this.lastErrorBody = null;
+            return body;
+        }
+    }
 }
+
