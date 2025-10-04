@@ -76,14 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+            android:visibility="visible"
+            android:padding="16dp">
 
 
                 <TextView
@@ -112,13 +106,10 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
 
     <!-- CARD 1 -->
-
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
         android:layout_width="308dp"
@@ -143,24 +134,24 @@
         android:layout_height="120dp"
         android:clickable="true"
         android:focusable="true"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:strokeWidth="0dp"
-        app:strokeColor="@android:color/transparent">
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/suggestions"
-                android:contentDescription="@string/btnSuggestions" />
+                android:contentDescription="@string/btnSuggestions"
+                android:src="@drawable/suggestions" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -179,24 +170,24 @@
         android:layout_height="120dp"
         android:clickable="true"
         android:focusable="true"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:strokeWidth="0dp"
-        app:strokeColor="@android:color/transparent">
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/voting"
-                android:contentDescription="@string/btnVoting" />
+                android:contentDescription="@string/btnVoting"
+                android:src="@drawable/voting" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -215,24 +206,24 @@
         android:layout_height="120dp"
         android:clickable="true"
         android:focusable="true"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:strokeWidth="0dp"
-        app:strokeColor="@android:color/transparent">
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/rating"
-                android:contentDescription="@string/btnRating" />
+                android:contentDescription="@string/btnRating"
+                android:src="@drawable/rating" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -251,24 +242,24 @@
         android:layout_height="120dp"
         android:clickable="true"
         android:focusable="true"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:strokeWidth="0dp"
-        app:strokeColor="@android:color/transparent">
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/dinner"
-                android:contentDescription="@string/btnDinner" />
+                android:contentDescription="@string/btnDinner"
+                android:src="@drawable/dinner" />
 
             <TextView
                 android:layout_width="wrap_content"

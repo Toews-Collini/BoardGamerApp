@@ -22,4 +22,4 @@ public class Spieltermin {
     public void setDatum(String datum) {
         this.datum = datum;
     }
-}
+}*/

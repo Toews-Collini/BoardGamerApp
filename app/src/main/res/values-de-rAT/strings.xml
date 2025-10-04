@@ -49,11 +49,15 @@
     <string name="btnSuggestions">Vorschläge</string>
     <string name="add_suggestions">Hinzufügen</string>
     <string name="newSuggestion">Neuer Vorschlag</string>
-    <string name="suggestionText">Füge hier deine Spiele-Vorschläge hinzu</string>
+    <string name="suggestionText">Füge hier neue Spielvorschläge hinzu</string>
     <string name="votingText">Stimme hier über Spielvorschläge ab</string>
     <string name="votingList">Voting Liste</string>
     <string name="thumbsUp">Daumen hoch</string>
     <string name="neutral">Neutral</string>
     <string name="thumbsDown">Daumen runter</string>
     <string name="save_voting">Votings speichern</string>
+    <string name="btnEnterDate">Datum eingeben (dd.mm.yyyy)</string>
+    <string name="btnEnterTime">Zeit auswählen</string>
+    <string name="createNewGameNight">Neuen Spieleabend anlegen</string>
+    <string name="addNewGameNight">Spieleabend anlegen</string>
 </resources>

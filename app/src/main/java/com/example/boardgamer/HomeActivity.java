@@ -35,22 +35,6 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         });
 
-
-        //@Eduard: for bottom nav menu - changing pages - need to add that on every page which includes bottom nav
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.home) {
-                return true;
-            } else if (id == R.id.messages) {
-                startActivity(new Intent(this, MessagesActivity.class));
-                return true;
-            } else if (id == R.id.settings) {
-                return true;
-            }
-            return false;
-        });
     }
     private void replaceFragment (Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -41,8 +41,8 @@ public class HomeFragment extends Fragment {
 
 
     private Button btnNewGameNight;
-    private ImageButton imgBtnPrevious;
-    private ImageButton imgBtnNext;
+    // private ImageButton imgBtnPrevious;
+   // private ImageButton imgBtnNext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,12 +75,12 @@ public class HomeFragment extends Fragment {
         nextGameNightHost3 = view.findViewById(R.id.tvHost3);
 
         btnNewGameNight   = view.findViewById(R.id.newGameNightButton);
-        imgBtnPrevious = view.findViewById(R.id.imgBtnPrevious);
-        imgBtnNext = view.findViewById(R.id.imgBtnNext);
+       // imgBtnPrevious = view.findViewById(R.id.imgBtnPrevious);
+       // imgBtnNext = view.findViewById(R.id.imgBtnNext);
 
         btnNewGameNight.setOnClickListener(v -> createGameNight());
 
-        imgBtnPrevious.setOnClickListener(v -> {
+       /* imgBtnPrevious.setOnClickListener(v -> {
             if (data.length == 0) return;
             index = Math.max(0, index - 1);
             render(false); // <-- vergangene Termine zulassen
@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
             if (data.length == 0) return;
             index = Math.min(data.length - 1, index + 1);
             render(true);  // <-- bei Next Zukunft erzwingen (überspringt ggf. vergangene)
-        });
+        }); */
 
         btnNewGameNight.setOnClickListener(v -> createGameNight());
 
@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
             nextGameNightDate1.setText(""); nextGameNightDate2.setText(""); nextGameNightDate3.setText("");
             nextGameNightLocation1.setText(""); nextGameNightLocation2.setText(""); nextGameNightLocation3.setText("");
             nextGameNightHost1.setText(""); nextGameNightHost2.setText(""); nextGameNightHost3.setText("");
-            imgBtnPrevious.setEnabled(false); imgBtnNext.setEnabled(false);
+            // imgBtnPrevious.setEnabled(false); imgBtnNext.setEnabled(false);
             return;
         }
 
@@ -184,8 +184,8 @@ public class HomeFragment extends Fragment {
         setUpcomingText(nextGameNightDate2, nextGameNightLocation2, nextGameNightHost2, index + 2);
         setUpcomingText(nextGameNightDate3, nextGameNightLocation3, nextGameNightHost3, index + 3);
 
-        imgBtnPrevious.setEnabled(index > 0);
-        imgBtnNext.setEnabled(index < data.length - 1);
+       // imgBtnPrevious.setEnabled(index > 0);
+      //  imgBtnNext.setEnabled(index < data.length - 1);
     }
 
     // ========== 5) Parsing/Formatting (wie gehabt, leicht gehärtet) ==========

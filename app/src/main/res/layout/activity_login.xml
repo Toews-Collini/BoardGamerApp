@@ -5,14 +5,9 @@
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_blue"
     tools:context=".LoginActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_blue"
-        tools:layout_editor_absoluteX="-205dp"
-        tools:layout_editor_absoluteY="0dp">
 
         <ImageView
             android:id="@+id/logo"
@@ -155,4 +150,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>

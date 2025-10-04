@@ -15,4 +15,4 @@ public class Spieleabend {
     @SerializedName("essen_kommentar") String essen_kommentar;
     @SerializedName("abend_sterne") int abend_sterne;
     @SerializedName("abend_kommentar") String abend_kommentar;
-}
+}*/
