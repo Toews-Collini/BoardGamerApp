@@ -60,4 +60,11 @@
     <string name="btnEnterTime">Zeit auswählen</string>
     <string name="createNewGameNight">Neuen Spieleabend anlegen</string>
     <string name="addNewGameNight">Spieleabend anlegen</string>
+    <string name="rateHost">Gastgeberbewertung</string>
+    <string name="rateFood">Essensbewertung</string>
+    <string name="rateEvening">Spieleabendbewertung</string>
+    <string name="ratingButton">Bewertung abgeben</string>
+    <string name="ratings">Gib dein Feedback zum vergangenem Spieleabend</string>
+    <string name="foodChoice">Wähle deine Lieblingsessensrichtung</string>
+    <string name="save_foodChoice">Essensrichtung speichern</string>
 </resources>

@@ -64,5 +64,12 @@
     <string name="createNewGameNight">Create new Game Night</string>
     <string name="success_profile_created">Profile created</string>
     <string name="addNewGameNight">Add new Game Night</string>
+    <string name="rateHost">Rate host</string>
+    <string name="rateFood">Rate food</string>
+    <string name="rateEvening">Rate Game Night</string>
+    <string name="ratingButton">Submit rating</string>
+    <string name="ratings">Give your feedback on the previous Game Night</string>
+    <string name="foodChoice">Choose your favorite type of food</string>
+    <string name="save_foodChoice">Save food choice</string>
 
 </resources>
