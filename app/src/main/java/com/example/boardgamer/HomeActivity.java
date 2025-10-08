@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -44,8 +41,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Button btnViewDetails;
     private Button btnNewGameNight;
-     private ImageButton imgBtnPrevious;
-     private ImageButton imgBtnNext;
+     private ImageView imgBtnPrevious;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +80,8 @@ public class HomeActivity extends AppCompatActivity {
 
         btnViewDetails = findViewById(R.id.btnViewDetails);
         btnNewGameNight = findViewById(R.id.newGameNightButton);
-         imgBtnPrevious = findViewById(R.id.imgBtnPrevious);
-         imgBtnNext = findViewById(R.id.imgBtnNext);
+        imgBtnPrevious = findViewById(R.id.btnBack);
+
 
         btnViewDetails.setOnClickListener(v -> showViewDetails());
         btnNewGameNight.setOnClickListener(v -> createGameNight());
@@ -96,11 +92,6 @@ public class HomeActivity extends AppCompatActivity {
             render(false); // <-- vergangene Termine zulassen
         });
 
-        imgBtnNext.setOnClickListener(v -> {
-            if (data.length == 0) return;
-            index = Math.min(data.length - 1, index + 1);
-            render(true);  // <-- bei Next Zukunft erzwingen (überspringt ggf. vergangene)
-        });
 
         btnNewGameNight.setOnClickListener(v -> createGameNight());
         setAppUserName();
@@ -161,7 +152,7 @@ public class HomeActivity extends AppCompatActivity {
             nextGameNightDate1.setText(""); nextGameNightDate2.setText(""); nextGameNightDate3.setText("");
             nextGameNightLocation1.setText(""); nextGameNightLocation2.setText(""); nextGameNightLocation3.setText("");
             nextGameNightHost1.setText(""); nextGameNightHost2.setText(""); nextGameNightHost3.setText("");
-             imgBtnPrevious.setEnabled(false); imgBtnNext.setEnabled(false);
+             imgBtnPrevious.setEnabled(false);
             return;
         }
 
@@ -180,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
         setUpcomingText(nextGameNightDate3, nextGameNightLocation3, nextGameNightHost3, index + 3);
 
          imgBtnPrevious.setEnabled(index > 0);
-          imgBtnNext.setEnabled(index < data.length - 1);
+
     }
 
     private java.time.ZonedDateTime parseLocalIgnoringOffset(String ts) {
