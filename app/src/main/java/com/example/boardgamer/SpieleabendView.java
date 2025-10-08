@@ -8,4 +8,5 @@ public class SpieleabendView {
     @SerializedName("ort") String ort;
     @SerializedName("strasse") String strasse;
     @SerializedName("termin") String termin;
+    @SerializedName("id") long termin_id;
 }

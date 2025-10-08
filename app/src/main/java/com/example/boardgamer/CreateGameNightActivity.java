@@ -76,7 +76,6 @@ public class CreateGameNightActivity extends AppCompatActivity {
 
     private void createNewGameNight() {
         try {
-            // Versuchen zu parsen – wenn erfolgreich, ist Format korrekt
             LocalDate.parse(gameNightDate.getText().toString(), formatter);
             java.time.format.DateTimeFormatter df =
                     java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -93,25 +92,21 @@ public class CreateGameNightActivity extends AppCompatActivity {
             insertNewGameNightData(zdt);
         } catch (DateTimeParseException e) {
             Toast.makeText(CreateGameNightActivity.this,"Ungültiges Datum! Bitte Format TT.MM.JJJJ verwenden.",Toast.LENGTH_SHORT).show();
-            return;
         }
     }
 
     private void insertNewGameNightData(java.time.ZonedDateTime zdt) {
-        // 1) Benutzereingaben auf dem MAIN-Thread einsammeln
-        final String dateStr = gameNightDate.getText().toString(); // "dd.MM.yyyy"
-        final String timeStr = gameNightTime; // "HH:mm"
+        final String dateStr = gameNightDate.getText().toString();
+        final String timeStr = gameNightTime;
 
         io.execute(() -> {
             try {
-                // --- NETWORK ---
                 String spielerJson = supa.selectAll("Spieler");
                 com.google.gson.JsonElement root = com.google.gson.JsonParser.parseString(spielerJson);
                 Spieler[] spielerArray = gson.fromJson(root, Spieler[].class);
                 if (spielerArray == null || spielerArray.length == 0)
                     throw new IllegalStateException("Keine Spieler gefunden.");
 
-                // --- LOGIK: nächsten Gastgeber bestimmen (Rotation) ---
                 String gastgeberJson = supa.selectLastGastgeberView();
                 String nextGastgeber = spielerArray[0].name;
 
@@ -131,10 +126,8 @@ public class CreateGameNightActivity extends AppCompatActivity {
                         }
                     }
                 }
-                // --- DATUM/Zeit sauber nach UTC-ISO bauen ---
                 String isoUtc = zdt.toInstant().toString(); // => "2025-09-27T16:00:00Z"
 
-                // --- INSERT ---
                 com.google.gson.JsonObject spieltermin = new com.google.gson.JsonObject();
                 spieltermin.addProperty("gastgeber_name", nextGastgeber);
                 spieltermin.addProperty("termin", isoUtc);
@@ -146,12 +139,10 @@ public class CreateGameNightActivity extends AppCompatActivity {
                 String host   = row.get("gastgeber_name").getAsString();
                 String termin = row.get("termin").getAsString();
 
-                // Ergebnis an Home zurückgeben
                 Intent data = new Intent();
                 data.putExtra("created_host", host);
                 data.putExtra("created_termin", termin);
 
-                // --- UI-Update ---
                 main.post(() -> {
                     android.widget.Toast.makeText(this,
                             "Spieltermin angelegt für " + host + " am " + dateStr + " " + timeStr,

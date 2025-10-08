@@ -64,13 +64,11 @@ public class SignUpActivity extends AppCompatActivity {
     public void signUp() {
         io.execute(() -> {
             try {
-                 // 1) Signup aufrufen
                 boolean signedIn = supa.signInWithPassword(email, password);
 
                 runOnUiThread(() -> {
                     if (signedIn) {
                         Toast.makeText(this,getString(R.string.success_login_successful),Toast.LENGTH_SHORT).show();
-                        // Optional: Direkt einloggen (falls E-Mail-Bestätigung deaktiviert ist)
                     } else {
                         Toast.makeText(this,getString(R.string.error_login_failed), Toast.LENGTH_SHORT).show();
                     }
@@ -83,7 +81,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             try {
-                // RPC-Argumente
                 com.google.gson.JsonObject args = new com.google.gson.JsonObject();
                 args.addProperty("p_name", name.getText().toString().trim());
                 args.addProperty("p_email", email);
@@ -91,13 +88,13 @@ public class SignUpActivity extends AppCompatActivity {
                 args.addProperty("p_ort", city.getText().toString().trim());
                 args.addProperty("p_strasse", street.getText().toString().trim());
 
-                // 3) Ein einzelner Call: erstellt Adresse + Spieler in einer Transaktion
                 String resultJson = supa.callRpc("create_spieler_mit_adresse", args);
 
                 runOnUiThread(() -> {
                     Intent i = new Intent(this, HomeActivity.class);
                     launcher.launch(i);
                     Toast.makeText(this, getString(R.string.success_profile_created), Toast.LENGTH_SHORT).show();
+                    finish();
                 });
             } catch (IOException e) {
                 final int code = supa.errorCode;

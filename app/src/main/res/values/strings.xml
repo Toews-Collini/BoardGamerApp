@@ -71,5 +71,7 @@
     <string name="ratings">Give your feedback on the previous Game Night</string>
     <string name="foodChoice">Choose your favorite type of food</string>
     <string name="save_foodChoice">Save food choice</string>
-
+    <string name="loading_failed">Loading failed</string>
+    <string name="no_data">No data</string>
+    <string name="insert_error">Insert error</string>
 </resources>
