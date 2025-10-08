@@ -123,25 +123,26 @@
                 android:layout_margin="8dp"
                 android:gravity="center"
                 android:orientation="horizontal">
-                <!--
+
                                <ImageButton
                                    android:id="@+id/imgBtnPrevious"
                                    android:layout_width="43dp"
                                    android:layout_height="wrap_content"
                                    android:layout_weight="1"
-                                   app:srcCompat="@android:drawable/ic_media_previous" /> -->
+                                   app:srcCompat="@android:drawable/ic_media_previous" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnViewDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/gameNightDetailsButton" />
-                <!--
+
                                 <ImageButton
                                     android:id="@+id/imgBtnNext"
                                     android:layout_width="44dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    app:srcCompat="@android:drawable/ic_media_next" /> -->
+                                    app:srcCompat="@android:drawable/ic_media_next" />
 
             </LinearLayout>
 

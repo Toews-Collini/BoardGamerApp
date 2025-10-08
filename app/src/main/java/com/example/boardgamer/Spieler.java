@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Spieler {
+    public static String appUserName = "";
+
     @SerializedName("name") public String name;
     @SerializedName("adresse") public long adresse;
     @SerializedName("email") public String email;

@@ -1,25 +1,12 @@
-/*package com.example.boardgamer;
+package com.example.boardgamer;
 
+import com.google.gson.annotations.SerializedName;
 
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
 
 public class Spieltermin {
-    String datum;
-    String zeit;
-
-    public String getZeit() {
-        return zeit;
-    }
-
-    public void setZeit(String zeit) {
-        this.zeit = zeit;
-    }
-
-    public String getDatum() {
-        return datum;
-    }
-
-    public void setDatum(String datum) {
-        this.datum = datum;
-    }
-}*/
+    @SerializedName("id") public long id;
+    @SerializedName("gastgeber_name") public String gastgeber_name;
+    @SerializedName("termin") public String termin;
+    @SerializedName("lieferdienst_id") public long lieferdienst_id;
+}

@@ -67,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
 
         io.execute(() -> {
             try {
-                // 1) Signup aufrufen
                 boolean signedIn = supa.signInWithPassword(email, password);
 
                 runOnUiThread(() -> {
@@ -103,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
 
         io.execute(() -> {
             try {
-                // 1) Signup aufrufen
                 boolean signedUp = supa.signUp(email, password);
 
                 runOnUiThread(() -> {

@@ -67,4 +67,7 @@
     <string name="ratings">Gib dein Feedback zum vergangenem Spieleabend</string>
     <string name="foodChoice">Wähle deine Lieblingsessensrichtung</string>
     <string name="save_foodChoice">Essensrichtung speichern</string>
+    <string name="loading_failed">Loading failed</string>
+    <string name="no_data">No data</string>
+    <string name="insert_error">Insert error</string>
 </resources>

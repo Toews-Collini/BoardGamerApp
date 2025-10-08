@@ -16,17 +16,26 @@ import android.util.Log;
 
 public class SupabaseClient {
     public static final String baseUrl = "https://bnykmtklumsygvtbbbry.supabase.co";           // https://<project>.supabase.co
-    public static final String anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJueWttdGtsdW1zeWd2dGJiYnJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwNTM0MDcsImV4cCI6MjA2OTYyOTQwN30.nkhUxiBFRcybP_Ted_l6SqZFT6VHQ1XhLIc6RPT4JhA";           // public anon key
+    public static final String anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJueWttdGtsdW1zeWd2dGJiYnJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwNTM0MDcsImV4cCI6MjA2OTYyOTQwN30.nkhUxiBFRcybP_Ted_l6SqZFT6VHQ1XhLIc6RPT4JhA";
+    public static String userEmail = "";
     private final OkHttpClient http = new OkHttpClient();
     private final Gson gson = new Gson();
     // Session
-    private static String accessToken;             // set after login
-    private static String refreshToken;            // set after login
+    private static String accessToken;
+    private static String refreshToken;
 
     public static int errorCode = 0;
     public String lastErrorBody = "";
 
-    // Email/Password Login -> /auth/v1/token?grant_type=password
+    private String authValue() {
+        String token = (accessToken != null && !accessToken.isEmpty()) ? accessToken : anonKey;
+        if (token.split("\\.").length != 3) {
+            Log.w("SupabaseClient", "Authorization token scheint ungültig – fallback auf anonKey");
+            token = anonKey;
+        }
+        return "Bearer " + token;
+    }
+
     public boolean signInWithPassword(String email, String password) throws IOException {
         HttpUrl url = HttpUrl.parse(baseUrl + "/auth/v1/token")
                 .newBuilder()
@@ -52,6 +61,7 @@ public class SupabaseClient {
             JsonObject json = gson.fromJson(res.body().string(), JsonObject.class);
             this.accessToken = json.get("access_token").getAsString();
             this.refreshToken = json.get("refresh_token").getAsString();
+            userEmail = email;
             return true;
         }
     }
@@ -74,11 +84,9 @@ public class SupabaseClient {
             String body = res.body() != null ? res.body().string() : "";
             Log.d("SupabaseClient", "signUp status=" + res.code() + " body=" + body);
             errorCode = res.code();
-            // GoTrue gibt 200 oder 201 bei Erfolg zurück (je nach Konfiguration)
             if (res.isSuccessful()) {
                 return true;
             } else {
-                // Typische Fehlertexte: already registered, password too short, etc.
                 return false;
             }
         }
@@ -112,7 +120,6 @@ public class SupabaseClient {
 
     // ---------- DATABASE (PostgREST) ----------
 
-    // SELECT: /rest/v1/<table>?select=*
     public String selectAll(String table) throws IOException {
         HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
                 .newBuilder()
@@ -122,7 +129,7 @@ public class SupabaseClient {
         Request req = new Request.Builder()
                 .url(url)
                 .addHeader("apikey", anonKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", authValue())
                 .get()
                 .build();
 
@@ -138,24 +145,14 @@ public class SupabaseClient {
             }
             return body;
         }
-
-/*
-        try (Response res = http.newCall(req).execute()) {
-            if (!res.isSuccessful()) throw new IOException("Select failed: " + res.code());
-            return res.body().string(); // JSON Array
-        }
-
- */
     }
-
-    // INSERT: /rest/v1/<table>
     public String insert(String table, JsonObject row) throws IOException {
         String url = baseUrl + "/rest/v1/" + table;
 
         Request req = new Request.Builder()
                 .url(url)
                 .addHeader("apikey", anonKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", authValue())
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Prefer", "return=representation")
                 .post(RequestBody.create(row.toString(), MediaType.get("application/json")))
@@ -184,7 +181,7 @@ public class SupabaseClient {
         Request req = new Request.Builder()
                 .url(url)
                 .addHeader("apikey", anonKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", authValue())
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Prefer", "return=representation")
                 .patch(RequestBody.create(patch.toString(), MediaType.get("application/json")))
@@ -209,7 +206,7 @@ public class SupabaseClient {
         Request req = new Request.Builder()
                 .url(url)
                 .addHeader("apikey", anonKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", authValue())
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Prefer", "return=representation")
                 .patch(RequestBody.create(patch.toString(), MediaType.get("application/json")))
@@ -234,7 +231,7 @@ public class SupabaseClient {
         Request req = new Request.Builder()
                 .url(url)
                 .addHeader("apikey", anonKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", authValue())
                 .delete()
                 .build();
 
@@ -252,7 +249,7 @@ public class SupabaseClient {
                 .url(url)
                 .post(okhttp3.RequestBody.create(args.toString(), okhttp3.MediaType.get("application/json")))
                 .addHeader("apikey", anonKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", authValue())
                 .addHeader("Content-Type", "application/json")
                 .build();
 
@@ -263,7 +260,7 @@ public class SupabaseClient {
                 this.lastErrorBody = body;
                 throw new IOException("RPC " + function + " failed: " + res.code() + " / " + body);
             }
-            return body; // z.B. {"spieler_id":123,"adresse_id":456}
+            return body;
         }
     }
 
@@ -271,14 +268,14 @@ public class SupabaseClient {
         okhttp3.HttpUrl url = okhttp3.HttpUrl
                 .parse(baseUrl + "/rest/v1/v_spieler_adresse_termin")
                 .newBuilder()
-                .addQueryParameter("select", "name,plz,ort,strasse,termin") // optional, aber klarer
+                .addQueryParameter("select", "name,plz,ort,strasse,id,termin") // optional, aber klarer
                 .build();
 
         okhttp3.Request req = new okhttp3.Request.Builder()
                 .url(url)
                 .get()
                 .addHeader("apikey", SupabaseClient.anonKey)
-                .addHeader("Authorization", "Bearer " + SupabaseClient.anonKey)
+                .addHeader("Authorization", authValue())
                 .addHeader("Accept", "application/json")
                 .build();
 
@@ -287,7 +284,7 @@ public class SupabaseClient {
             String body = (res.body() != null) ? res.body().string() : "";
 
             if (!res.isSuccessful()) {
-                this.lastErrorBody = body; // zum Debuggen merken
+                this.lastErrorBody = body;
                 throw new IOException("HTTP " + res.code() + " on GET v_spieler_adresse_termin");
             }
 
@@ -300,14 +297,14 @@ public class SupabaseClient {
         okhttp3.HttpUrl url = okhttp3.HttpUrl
                 .parse(baseUrl + "/rest/v1/v_latest_spieltermin_gastgeber")
                 .newBuilder()
-                .addQueryParameter("select", "gastgeber_name") // optional, aber klarer
+                .addQueryParameter("select", "gastgeber_name")
                 .build();
 
         okhttp3.Request req = new okhttp3.Request.Builder()
                 .url(url)
                 .get()
                 .addHeader("apikey", SupabaseClient.anonKey)
-                .addHeader("Authorization", "Bearer " + SupabaseClient.anonKey)
+                .addHeader("Authorization", authValue())
                 .addHeader("Accept", "application/json")
                 .build();
 
@@ -316,11 +313,85 @@ public class SupabaseClient {
             String body = (res.body() != null) ? res.body().string() : "";
 
             if (!res.isSuccessful()) {
-                this.lastErrorBody = body; // zum Debuggen merken
+                this.lastErrorBody = body;
                 throw new IOException("HTTP " + res.code() + " on GET v_latest_spieltermin_gastgeber");
             }
 
             this.lastErrorBody = null;
+            return body;
+        }
+    }
+
+    public String upsertMany(String table, com.google.gson.JsonArray rows, String conflictTarget) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
+                .newBuilder()
+                .addQueryParameter("on_conflict", conflictTarget)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Prefer", "return=representation,resolution=merge-duplicates")
+                .post(RequestBody.create(rows.toString(), MediaType.get("application/json")))
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", "UPSERT " + table + " -> " + res.code() + " body=" + body);
+            if (!res.isSuccessful()) {
+                throw new IOException("Upsert " + table + " failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+    }
+
+    public String getVorgeschlageneSpieleById(long id) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Vorgeschlagene_Spiele")
+                .newBuilder()
+                .addQueryParameter("select", "*")
+                .addQueryParameter("spieltermin_id", "eq." + id)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", res.code() + " body=" + body);
+            if (!res.isSuccessful()) {
+                throw new IOException("Select failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+    }
+
+    public String getGespielteSpieleByIdAndPlayer(long id, String player) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Gespielte_Spiele")
+                .newBuilder()
+                .addQueryParameter("select", "*")
+                .addQueryParameter("spieltermin_id", "eq." + id)
+                .addQueryParameter("spieler_name", "eq." + player)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", res.code() + " body=" + body);
+            if (!res.isSuccessful()) {
+                throw new IOException("Select failed: " + res.code() + " / " + body);
+            }
             return body;
         }
     }
