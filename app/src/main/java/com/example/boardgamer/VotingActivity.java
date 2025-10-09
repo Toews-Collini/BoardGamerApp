@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.JsonParser;
 
 import com.google.gson.Gson;
 
@@ -37,7 +38,7 @@ public class VotingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting);
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         bottomNavigation.setOnItemSelectedListener(item -> {
@@ -78,48 +79,79 @@ public class VotingActivity extends AppCompatActivity {
         io.execute(() -> {
             try {
                 String votingJson = supa.getGespielteSpieleByIdAndPlayer(spieltermin_id, Spieler.appUserName);
-                SpielVoting[] all = gson.fromJson(JsonParser.parseString(votingJson), SpielVoting[].class);
-                java.util.List<SpielVoting> votesForTermin = new java.util.ArrayList<>();
-                if (all != null) {
-                    for (SpielVoting v : all) {
-                        if (v.spieltermin_id == spieltermin_id) votesForTermin.add(v);
-                    }
-                }
-                boolean hasVotes = !votesForTermin.isEmpty();
+                SpielVoting[] votings = gson.fromJson(votingJson, SpielVoting[].class);
+
+                boolean hasVotes = votings != null && votings.length > 0;
 
                 String spieleJson = supa.selectAll("Spiel");
-                Spiel[] spiele = gson.fromJson(JsonParser.parseString(spieleJson), Spiel[].class);
+                Spiel[] spiele = gson.fromJson(spieleJson, Spiel[].class);
                 if (spiele == null || spiele.length == 0) return;
 
                 spiel_id2name.clear();
                 for (Spiel s : spiele) spiel_id2name.put(s.id, s.bezeichnung);
 
+                java.util.LinkedHashMap<String,Integer> items = new java.util.LinkedHashMap<>();
                 if (hasVotes) {
-                    java.util.LinkedHashMap<String,Integer> items = new java.util.LinkedHashMap<>();
-                    for (SpielVoting v : votesForTermin) {
+                    for (SpielVoting v : votings) {
                         String name = spiel_id2name.get(v.spiel_id);
                         if (name != null) items.put(name, v.spielerstimme_id);
                     }
                     main.post(() -> adapter.submitAll(items));
-                } else {
-                    String vorschlaegeJson = supa.getVorgeschlageneSpieleById(spieltermin_id);
-                    Spielvorschlag[] vorschlaege = gson.fromJson(JsonParser.parseString(vorschlaegeJson), Spielvorschlag[].class);
-                    if (vorschlaege == null) vorschlaege = new Spielvorschlag[0];
+                }
+                String vorschlaegeJson = supa.getVorgeschlageneSpieleById(spieltermin_id);
+                Spielvorschlag[] vorschlaege = gson.fromJson(vorschlaegeJson, Spielvorschlag[].class);
+                if (vorschlaege == null) vorschlaege = new Spielvorschlag[0];
 
-                    java.util.LinkedHashSet<String> names = new java.util.LinkedHashSet<>();
-                    for (Spielvorschlag v : vorschlaege) {
-                        if (v.spieltermin_id != spieltermin_id) continue;
-                        String name = spiel_id2name.get(v.spiel_id);
-                        if (name != null && !name.isEmpty()) names.add(name);
-                    }
-                    java.util.ArrayList<String> list = new java.util.ArrayList<>(names);
-                    java.util.Collections.sort(list, String::compareToIgnoreCase);
-
-                    java.util.LinkedHashMap<String,Integer> items = new java.util.LinkedHashMap<>();
-                    for (String n : list) items.put(n, 0);
-                    main.post(() -> adapter.submitAll(items));
+                java.util.LinkedHashSet<String> names = new java.util.LinkedHashSet<>();
+                for (Spielvorschlag v : vorschlaege) {
+                    if (v.spieltermin_id != spieltermin_id) continue;
+                    String name = spiel_id2name.get(v.spiel_id);
+                    if (name != null && !name.isEmpty()) names.add(name);
                 }
 
+                java.util.ArrayList<String> list = new java.util.ArrayList<>(names);
+                java.util.Collections.sort(list, String::compareToIgnoreCase);
+
+                main.post(() -> {
+                    for (String n : list) {
+                        boolean itemExists = false;
+                        for (String item : items.keySet()) {
+                            if (n.equals(item)) {
+                                itemExists = true;
+                            }
+                        }
+                        if (!itemExists) {
+                            adapter.addItem(n);
+                            HashMap<String, Long> name2id = new HashMap<>();
+                            for (Map.Entry<Long, String> e : spiel_id2name.entrySet())
+                                name2id.put(e.getValue(), e.getKey());
+                            com.google.gson.JsonArray rows = new com.google.gson.JsonArray();
+                            int state = 3;
+                            Long spielId = name2id.get(n);
+                            if (spielId == null) continue;
+
+                            com.google.gson.JsonObject row = new com.google.gson.JsonObject();
+                            row.addProperty("spieltermin_id", spieltermin_id);
+                            row.addProperty("spiel_id", spielId);
+                            row.addProperty("spieler_name", Spieler.appUserName);
+                            row.addProperty("spielerstimme_id", state);
+                            rows.add(row);
+
+                            io.execute(() -> {
+                                try {
+                                    supa.upsertMany(
+                                            "Gespielte_Spiele",
+                                            rows,
+                                            "spieltermin_id,spieler_name,spiel_id"
+                                    );
+                                } catch (Exception ex) {
+                                    main.post(() -> Toast.makeText(this, "Fehler: " + ex.getClass().getSimpleName(), Toast.LENGTH_LONG).show());
+                                    android.util.Log.e("loadVoting", "Unerwarteter Fehler", ex);
+                                }
+                            });
+                        }
+                    }
+                });
             } catch (Exception e) {
                 main.post(() -> Toast.makeText(this, "Fehler: " + e.getClass().getSimpleName(), Toast.LENGTH_LONG).show());
                 android.util.Log.e("loadVoting", "Unerwarteter Fehler", e);
@@ -129,44 +161,41 @@ public class VotingActivity extends AppCompatActivity {
 
 
     private void saveVoting() {
-        Map<String,Integer> votes = adapter.snapshot();
-        if (votes.isEmpty()) { Toast.makeText(this, "Keine Änderungen", Toast.LENGTH_SHORT).show();
-           return;
-        }
+        Map<String, Integer> votes = adapter.snapshot();
+        if (votes.isEmpty()) { Toast.makeText(this,"Keine Änderungen",Toast.LENGTH_SHORT).show(); return; }
 
         HashMap<String, Long> name2id = new HashMap<>();
-        for (var e : spiel_id2name.entrySet()) name2id.put(e.getValue(), e.getKey());
-        if (name2id.isEmpty()) { Toast.makeText(this, "Spiel-Liste noch nicht geladen", Toast.LENGTH_SHORT).show(); return; }
+        for (Map.Entry<Long, String> e : spiel_id2name.entrySet()) name2id.put(e.getValue(), e.getKey());
 
-        com.google.gson.JsonArray rows = new com.google.gson.JsonArray();
-        for (var e : votes.entrySet()) {
-            int state = e.getValue() == null ? 0 : e.getValue();
-            if (state <= 0) continue;
-            Long spielId = name2id.get(e.getKey());
-            if (spielId == null) continue;
-
-            com.google.gson.JsonObject row = new com.google.gson.JsonObject();
-            row.addProperty("spieltermin_id",   spieltermin_id);
-            row.addProperty("spiel_id",         spielId);
-            row.addProperty("spieler_name",     Spieler.appUserName);
-            row.addProperty("spielerstimme_id", state);
-            rows.add(row);
+        java.util.List<Map.Entry<String,Integer>> toUpdate = new java.util.ArrayList<>();
+        for (Map.Entry<String,Integer> e : votes.entrySet()) {
+            Integer v = e.getValue();
+            if (v != null && v > 0) toUpdate.add(e);
         }
-        if (rows.size() == 0) { Toast.makeText(this, "Nichts zu speichern", Toast.LENGTH_SHORT).show(); return; }
+        if (toUpdate.isEmpty()) { return; }
 
-        io.execute(() -> {
-            try {
-                supa.upsertMany(
-                        "Gespielte_Spiele",
-                        rows,
-                        "spieltermin_id,spieler_name,spiel_id"
-                );
-                main.post(() -> Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show());
-            } catch (Exception ex) {
-                main.post(() -> Toast.makeText(this, R.string.insert_error, Toast.LENGTH_SHORT).show());
-                android.util.Log.e("saveVoting", "Upsert failed", ex);
-            }
-        });
+        java.util.concurrent.atomic.AtomicInteger remaining = new java.util.concurrent.atomic.AtomicInteger(toUpdate.size());
+
+        for (Map.Entry<String,Integer> e : toUpdate) {
+            Long spielId = name2id.get(e.getKey());
+            if (spielId == null) { if (remaining.decrementAndGet()==0) main.post(this::loadVoting); continue; }
+
+            int state = e.getValue();
+            io.execute(() -> {
+                try {
+                    supa.updateGespielteSpiele(spieltermin_id, spielId, Spieler.appUserName, state);
+                } catch (Exception ex) {
+                    main.post(() -> Toast.makeText(this, R.string.insert_error, Toast.LENGTH_SHORT).show());
+                    android.util.Log.e("saveVoting", "Update failed", ex);
+                } finally {
+                    if (remaining.decrementAndGet() == 0) {
+                        main.post(() -> {
+                            Toast.makeText(this, R.string.data_saved, Toast.LENGTH_SHORT).show();
+                            loadVoting();
+                        });
+                    }
+                }
+            });
+        }
     }
-
 }

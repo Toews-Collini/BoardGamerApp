@@ -81,7 +81,7 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VH> {
 
     public int addItem(@NonNull String title) {
         if (!items.containsKey(title)) {
-            items.put(title, 0);
+            items.put(title, 3);
             keys.add(title);
             int pos = keys.size() - 1;
             notifyItemInserted(pos);

@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
@@ -103,11 +103,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnNewGameNight.setOnClickListener(v -> createGameNight());
-        setAppUserName();
-
-        currentSpieltermin.termin_id = -1;
-
-        loadData();
+        setAppUserName(() -> {
+            currentSpieltermin.termin_id = -1;
+            loadData();
+        });
     }
 
     private void loadData() {
@@ -251,40 +250,25 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void setAppUserName() {
+    private void setAppUserName(Runnable then) {
         io.execute(() -> {
             try {
-                String appuserJson = supa.selectAll("Spieler"); // <-- läuft jetzt im IO-Thread
-                Spieler[] arr = gson.fromJson(
-                        com.google.gson.JsonParser.parseString(appuserJson),
-                        Spieler[].class
-                );
+                String appuserJson = supa.getSpielerByEmail(SupabaseClient.userEmail);
+                Spieler[] arr = gson.fromJson(com.google.gson.JsonParser.parseString(appuserJson), Spieler[].class);
+                String foundName = (arr != null && arr.length > 0) ? arr[0].name : null;
 
-                String foundName = null;
-                if (arr != null) {
-                    for (Spieler s : arr) {
-                        if (s == null) continue;
-                        if (java.util.Objects.equals(s.email, SupabaseClient.userEmail)) {
-                            foundName = s.name;
-                            break;
-                        }
-                    }
-                }
-
-                final String nameToSet = foundName;
                 main.post(() -> {
-                    if (nameToSet != null) {
-                        Spieler.appUserName = nameToSet;
+                    if (foundName != null) {
+                        Spieler.appUserName = foundName;
+                        then.run(); // erst jetzt weiter
                     } else {
                         Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
-
             } catch (Exception e) {
-                main.post(() -> {
-                    Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
-                });
+                main.post(() -> Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show());
             }
         });
     }
+
 }

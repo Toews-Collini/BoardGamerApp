@@ -38,7 +38,7 @@ public class RatingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
 
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         bottomNavigation.setOnItemSelectedListener(item -> {
