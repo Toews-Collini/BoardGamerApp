@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
 
         inputEmail = findViewById(R.id.editInputEmail);
         inputPassword = findViewById(R.id.editInputPassword);

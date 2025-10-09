@@ -40,7 +40,7 @@ public class SuggestionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestions);
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         bottomNavigation.setOnItemSelectedListener(item -> {

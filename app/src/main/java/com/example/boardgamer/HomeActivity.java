@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -42,13 +46,14 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnViewDetails;
     private Button btnNewGameNight;
      private ImageView imgBtnPrevious;
+//     private ImageButton imgBtnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
@@ -80,8 +85,8 @@ public class HomeActivity extends AppCompatActivity {
 
         btnViewDetails = findViewById(R.id.btnViewDetails);
         btnNewGameNight = findViewById(R.id.newGameNightButton);
-        imgBtnPrevious = findViewById(R.id.btnBack);
-
+         imgBtnPrevious = findViewById(R.id.btnBack);
+//         imgBtnNext = findViewById(R.id.imgBtnNext);
 
         btnViewDetails.setOnClickListener(v -> showViewDetails());
         btnNewGameNight.setOnClickListener(v -> createGameNight());
@@ -91,14 +96,18 @@ public class HomeActivity extends AppCompatActivity {
             index = Math.max(0, index - 1);
             render(false); // <-- vergangene Termine zulassen
         });
-
-
+/*
+        imgBtnNext.setOnClickListener(v -> {
+            if (data.length == 0) return;
+            index = Math.min(data.length - 1, index + 1);
+            render(true);  // <-- bei Next Zukunft erzwingen (überspringt ggf. vergangene)
+        });
+*/
         btnNewGameNight.setOnClickListener(v -> createGameNight());
-        setAppUserName();
-
-        currentSpieltermin.termin_id = -1;
-
-        loadData();
+        setAppUserName(() -> {
+            currentSpieltermin.termin_id = -1;
+            loadData();
+        });
     }
 
     private void loadData() {
@@ -153,6 +162,7 @@ public class HomeActivity extends AppCompatActivity {
             nextGameNightLocation1.setText(""); nextGameNightLocation2.setText(""); nextGameNightLocation3.setText("");
             nextGameNightHost1.setText(""); nextGameNightHost2.setText(""); nextGameNightHost3.setText("");
              imgBtnPrevious.setEnabled(false);
+//             imgBtnNext.setEnabled(false);
             return;
         }
 
@@ -171,7 +181,7 @@ public class HomeActivity extends AppCompatActivity {
         setUpcomingText(nextGameNightDate3, nextGameNightLocation3, nextGameNightHost3, index + 3);
 
          imgBtnPrevious.setEnabled(index > 0);
-
+//        imgBtnNext.setEnabled(index < data.length - 1);
     }
 
     private java.time.ZonedDateTime parseLocalIgnoringOffset(String ts) {
@@ -242,40 +252,25 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void setAppUserName() {
+    private void setAppUserName(Runnable then) {
         io.execute(() -> {
             try {
-                String appuserJson = supa.selectAll("Spieler"); // <-- läuft jetzt im IO-Thread
-                Spieler[] arr = gson.fromJson(
-                        com.google.gson.JsonParser.parseString(appuserJson),
-                        Spieler[].class
-                );
+                String appuserJson = supa.getSpielerByEmail(SupabaseClient.userEmail);
+                Spieler[] arr = gson.fromJson(com.google.gson.JsonParser.parseString(appuserJson), Spieler[].class);
+                String foundName = (arr != null && arr.length > 0) ? arr[0].name : null;
 
-                String foundName = null;
-                if (arr != null) {
-                    for (Spieler s : arr) {
-                        if (s == null) continue;
-                        if (java.util.Objects.equals(s.email, SupabaseClient.userEmail)) {
-                            foundName = s.name;
-                            break;
-                        }
-                    }
-                }
-
-                final String nameToSet = foundName;
                 main.post(() -> {
-                    if (nameToSet != null) {
-                        Spieler.appUserName = nameToSet;
+                    if (foundName != null) {
+                        Spieler.appUserName = foundName;
+                        then.run(); // erst jetzt weiter
                     } else {
                         Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
-
             } catch (Exception e) {
-                main.post(() -> {
-                    Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
-                });
+                main.post(() -> Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show());
             }
         });
     }
+
 }

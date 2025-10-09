@@ -129,10 +129,10 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     android:contentDescription="@string/previous"
                     android:padding="8dp"
-                    android:src="@drawable/arrow_back"
-                    />
+                    android:src="@drawable/arrow_back" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnViewDetails"

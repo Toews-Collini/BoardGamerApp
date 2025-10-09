@@ -1,5 +1,7 @@
 package com.example.boardgamer;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -12,35 +14,45 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import android.content.Context;
 import android.util.Log;
 
-public class SupabaseClient {
+public final class SupabaseClient {
     public static final String baseUrl = "https://bnykmtklumsygvtbbbry.supabase.co";           // https://<project>.supabase.co
     public static final String anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJueWttdGtsdW1zeWd2dGJiYnJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwNTM0MDcsImV4cCI6MjA2OTYyOTQwN30.nkhUxiBFRcybP_Ted_l6SqZFT6VHQ1XhLIc6RPT4JhA";
     public static String userEmail = "";
     private final OkHttpClient http = new OkHttpClient();
     private final Gson gson = new Gson();
-    // Session
-    private static String accessToken;
-    private static String refreshToken;
+    private final Context appCtx;                   // <-- Context für AuthStore
+
+    // NICHT static – Instanzzustand ist sauberer
+    public String accessToken;
+    private String refreshToken;
 
     public static int errorCode = 0;
     public String lastErrorBody = "";
 
+    public SupabaseClient(Context ctx) {
+        this.appCtx = ctx.getApplicationContext();
+        // Beim Erstellen Token aus dem Store laden:
+        this.accessToken  = AuthStore.loadAccess(this.appCtx);
+        this.refreshToken = AuthStore.loadRefresh(this.appCtx);
+    }
+
+    public void setAccessToken(String token) { this.accessToken = token; }
+    public boolean isAuthenticated() { return accessToken != null && !accessToken.isEmpty(); }
+
     private String authValue() {
-        String token = (accessToken != null && !accessToken.isEmpty()) ? accessToken : anonKey;
-        if (token.split("\\.").length != 3) {
-            Log.w("SupabaseClient", "Authorization token scheint ungültig – fallback auf anonKey");
-            token = anonKey;
-        }
-        return "Bearer " + token;
+        if (accessToken == null || accessToken.isEmpty())
+            throw new IllegalStateException("Kein User-Access-Token – bitte einloggen.");
+        if (accessToken.split("\\.").length != 3)
+            throw new IllegalStateException("Ungültiges Access-Token-Format.");
+        return "Bearer " + accessToken;
     }
 
     public boolean signInWithPassword(String email, String password) throws IOException {
         HttpUrl url = HttpUrl.parse(baseUrl + "/auth/v1/token")
-                .newBuilder()
-                .addQueryParameter("grant_type", "password")
-                .build();
+                .newBuilder().addQueryParameter("grant_type", "password").build();
 
         JsonObject body = new JsonObject();
         body.addProperty("email", email);
@@ -54,14 +66,45 @@ public class SupabaseClient {
                 .build();
 
         try (Response res = http.newCall(req).execute()) {
-            if (!res.isSuccessful()) {
-                errorCode = res.code();
-                return false;
-            }
+            if (!res.isSuccessful()) { errorCode = res.code(); return false; }
+
             JsonObject json = gson.fromJson(res.body().string(), JsonObject.class);
-            this.accessToken = json.get("access_token").getAsString();
+            this.accessToken  = json.get("access_token").getAsString();
             this.refreshToken = json.get("refresh_token").getAsString();
+
+            // ➜ Tokens dauerhaft speichern
+            AuthStore.saveTokens(appCtx, accessToken, refreshToken);
+
             userEmail = email;
+            return true;
+        }
+    }
+
+    public boolean refreshSession() throws IOException {
+        if (refreshToken == null || refreshToken.isEmpty()) return false;
+
+        HttpUrl url = HttpUrl.parse(baseUrl + "/auth/v1/token")
+                .newBuilder().addQueryParameter("grant_type", "refresh_token").build();
+
+        JsonObject body = new JsonObject();
+        body.addProperty("refresh_token", refreshToken);
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Content-Type", "application/json")
+                .post(RequestBody.create(body.toString(), MediaType.get("application/json")))
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            if (!res.isSuccessful()) return false;
+
+            JsonObject json = gson.fromJson(res.body().string(), JsonObject.class);
+            this.accessToken  = json.get("access_token").getAsString();
+            this.refreshToken = json.get("refresh_token").getAsString();
+
+            // ➜ nach Refresh wieder speichern
+            AuthStore.saveTokens(appCtx, accessToken, refreshToken);
             return true;
         }
     }
@@ -92,31 +135,33 @@ public class SupabaseClient {
         }
     }
 
-    // Refresh -> /auth/v1/token?grant_type=refresh_token
-    public boolean refreshSession() throws IOException {
-        HttpUrl url = HttpUrl.parse(baseUrl + "/auth/v1/token")
+    public String getSpielerByEmail(String email) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Spieler")
                 .newBuilder()
-                .addQueryParameter("grant_type", "refresh_token")
+                .addQueryParameter("email", "eq." + email)   // <— genau filtern
+                .addQueryParameter("select", "name,email")   // nur was du brauchst
                 .build();
-
-        JsonObject body = new JsonObject();
-        body.addProperty("refresh_token", refreshToken);
 
         Request req = new Request.Builder()
                 .url(url)
+                .get()
                 .addHeader("apikey", anonKey)
-                .addHeader("Content-Type", "application/json")
-                .post(RequestBody.create(body.toString(), MediaType.get("application/json")))
+                .addHeader("Authorization", authValue())     // <— USER TOKEN!
+                .addHeader("Accept", "application/json")
                 .build();
 
         try (Response res = http.newCall(req).execute()) {
-            if (!res.isSuccessful()) return false;
-            JsonObject json = gson.fromJson(res.body().string(), JsonObject.class);
-            this.accessToken = json.get("access_token").getAsString();
-            this.refreshToken = json.get("refresh_token").getAsString();
-            return true;
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", "GET Spieler by email -> " + res.code() + " body=" + body);
+            errorCode = res.code();
+            if (!res.isSuccessful()) throw new IOException("GET Spieler failed: " + res.code() + " / " + body);
+            return body;
         }
     }
+
+
+
+    // Refresh -> /auth/v1/token?grant_type=refresh_token
 
     // ---------- DATABASE (PostgREST) ----------
 
@@ -394,6 +439,45 @@ public class SupabaseClient {
             }
             return body;
         }
+    }
+/*
+    public String updateGespielteSpiele(long spieltermin_id, long spiel_id, String spieler_name, int spielerstimme_id) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Gespielte_Spiele")
+                .newBuilder()
+                .addQueryParameter("spieltermin_id", "eq." + spieltermin_id)
+                .addQueryParameter("spiel_id", "eq." + spiel_id)
+                .addQueryParameter("spieler_name", "eq." + spieler_name)
+                .addQueryParameter("select", "spieltermin_id,spiel_id,spieler_name,spielerstimme_id")
+                .build();
+
+        String bodyJson = "{\"spielerstimme_id\":" + spielerstimme_id + "}";
+        Request req = new Request.Builder()
+                .url(url)
+                .patch(RequestBody.create(bodyJson, MediaType.parse("application/json")))
+                .addHeader("apikey", anonKey)              // immer anonKey hier
+                .addHeader("Authorization", authValue())   // immer USER token hier
+                .addHeader("Prefer", "return=representation,count=exact")
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("Update", "code=" + res.code() + " range=" + res.header("Content-Range") + " body=" + body);
+            if (!res.isSuccessful()) throw new IOException("Update failed: " + res.code() + " / " + body);
+            return body;
+        }
+    }
+*/
+    public String updateGespielteSpiele(long spieltermin_id, long spiel_id, String spieler_name, int spielerstimme_id) throws IOException {
+        // RPC-Args exakt wie die Funktionsparameter heißen!
+        com.google.gson.JsonObject args = new com.google.gson.JsonObject();
+        args.addProperty("termin_id", spieltermin_id);
+        args.addProperty("game_id",   spiel_id);
+        args.addProperty("player_name", spieler_name);
+        args.addProperty("vote",        spielerstimme_id);
+
+        String body = callRpc("update_gespielte_spiele", args);  // POST /rest/v1/rpc/update_gespielte_spiele
+        android.util.Log.d("RPC:update_gespielte_spiele", body);
+        return body;
     }
 }
 

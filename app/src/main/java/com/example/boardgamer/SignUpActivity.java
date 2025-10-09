@@ -48,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         street = findViewById(R.id.inputStreetSignUp);
         btnSignUp = findViewById(R.id.btnSignUp);
 
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
 
         btnSignUp.setOnClickListener(v -> {
             if (name.getText().toString().trim().isEmpty() || plz.getText().toString().trim().isEmpty() || city.getText().toString().trim().isEmpty() || street.getText().toString().trim().isEmpty()) {

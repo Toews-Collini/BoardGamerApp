@@ -71,7 +71,7 @@ public class CreateGameNightActivity extends AppCompatActivity {
 
         btnInsertGameNightData.setOnClickListener(v -> createNewGameNight());
 
-        supa = new SupabaseClient();
+        supa = new SupabaseClient(this);
     }
 
     private void createNewGameNight() {
