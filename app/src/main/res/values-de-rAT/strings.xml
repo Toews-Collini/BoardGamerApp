@@ -71,4 +71,12 @@
     <string name="no_data">No data</string>
     <string name="insert_error">Insert error</string>
     <string name="data_saved">Data saved</string>
+    <string name="votingDescription">Klicke auf das Daumen-Symbol, um zwischen gefällt mir, neutral und gefällt mir nicht zu wechseln</string>
+    <string name="comment">Kommentar</string>
+    <string name="german">Deutsch</string>
+    <string name="italian">Italienisch</string>
+    <string name="greek">Griechisch</string>
+    <string name="turkish">Türkisch</string>
+    <string name="indian">Indisch</string>
+    <string name="mexican">Mexikanisch</string>
 </resources>

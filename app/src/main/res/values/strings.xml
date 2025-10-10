@@ -75,4 +75,12 @@
     <string name="no_data">No data</string>
     <string name="insert_error">Insert error</string>
     <string name="data_saved">Data saved</string>
+    <string name="votingDescription">Click the thumbs icon to switch between like, neutral, and dislike</string>
+    <string name="comment">Comment</string>
+    <string name="german">German\n</string>
+    <string name="italian">Italian</string>
+    <string name="greek">Greek</string>
+    <string name="turkish">Turkish</string>
+    <string name="indian">Indian</string>
+    <string name="mexican">Mexican</string>
 </resources>
