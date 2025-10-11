@@ -43,7 +43,7 @@
     <string name="error_profile_creation_failed">Anlegen des Profils fehlgeschlagen</string>
     <string name="error_name_already_taken">Name ist bereits vergeben</string>
     <string name="gameNightDetails">Spieleabend-Details</string>
-    <string name="btnVoting">Voting</string>
+    <string name="btnVoting">Abstimmung</string>
     <string name="btnDinner">Essen</string>
     <string name="btnRating">Bewertung</string>
     <string name="btnSuggestions">Vorschläge</string>
@@ -79,4 +79,7 @@
     <string name="turkish">Türkisch</string>
     <string name="indian">Indisch</string>
     <string name="mexican">Mexikanisch</string>
+    <string name="foodChoiceOverview">Sieh die Essenswünsche deiner Gäste</string>
+    <string name="guestName">Gästename:</string>
+    <string name="guestChoice">Essensrichtung:</string>
 </resources>
