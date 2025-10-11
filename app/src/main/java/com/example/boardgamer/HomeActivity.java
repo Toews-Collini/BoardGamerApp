@@ -1,7 +1,12 @@
 package com.example.boardgamer;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,25 +23,25 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 
 import java.util.concurrent.ExecutorService;
 
 public class HomeActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     private static final String TAG = "SpieleabendViewJson";
-    private static final java.time.ZoneId APP_ZONE = java.time.ZoneId.of("Europe/Berlin");
     private static final java.time.format.DateTimeFormatter DISP_FMT =
             java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private final ExecutorService io = java.util.concurrent.Executors.newSingleThreadExecutor();
     private final android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
     private final Gson gson = new Gson();
-
     private SupabaseClient supa;
     private SpieleabendView[] data = new SpieleabendView[0];
     private SpieleabendView currentSpieltermin = new SpieleabendView();
     private int index = 0;
-
+    private boolean setNotification = false;
+    long alarmTimeInSeconds = 0;
     // Views
     private TextView gameNightDate, gameNightLocation, gameNightHost;
     private TextView nextGameNightDate1, nextGameNightDate2, nextGameNightDate3;
@@ -110,6 +115,12 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+    }
+
     private void loadData() {
         io.execute(() -> {
             try {
@@ -135,7 +146,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private int computeInitialIndex(SpieleabendView[] arr) {
-        java.time.ZonedDateTime now = java.time.ZonedDateTime.now(APP_ZONE);
+        java.time.ZonedDateTime now = java.time.ZonedDateTime.now();
+
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == null || arr[i].termin == null) continue;
             java.time.ZonedDateTime when = parseLocalIgnoringOffset(arr[i].termin);
@@ -145,11 +157,21 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void ensureCurrentIsFuture() {
-        java.time.ZonedDateTime now = java.time.ZonedDateTime.now(APP_ZONE);
+        java.time.ZonedDateTime now = java.time.ZonedDateTime.now();
         while (index < data.length) {
             SpieleabendView v = data[index];
             java.time.ZonedDateTime when = (v != null) ? parseLocalIgnoringOffset(v.termin) : null;
-            if (when != null && when.isAfter(now)) break;
+            if (when != null && when.isAfter(now)) {
+                long nowInSeconds = now.toInstant().getEpochSecond();
+                long WhenInseconds = when.toInstant().getEpochSecond();
+                if (WhenInseconds >= nowInSeconds- (3600 * 24)) {
+//                if (WhenInseconds - (3600 * 24) <= nowInSeconds) {
+                    alarmTimeInSeconds = WhenInseconds;
+                    setNotification = true;
+                }
+
+                break;
+            }
             index++;
         }
         if (index >= data.length) index = Math.max(0, data.length - 1);
@@ -180,7 +202,9 @@ public class HomeActivity extends AppCompatActivity {
         setUpcomingText(nextGameNightDate2, nextGameNightLocation2, nextGameNightHost2, index + 2);
         setUpcomingText(nextGameNightDate3, nextGameNightLocation3, nextGameNightHost3, index + 3);
 
-         imgBtnPrevious.setEnabled(index > 0);
+        maybeScheduleNotification();
+
+        imgBtnPrevious.setEnabled(index > 0);
 //        imgBtnNext.setEnabled(index < data.length - 1);
     }
 
@@ -188,12 +212,12 @@ public class HomeActivity extends AppCompatActivity {
         if (ts == null || ts.isEmpty()) return null;
         try {
             java.time.LocalDateTime ldt = java.time.LocalDateTime.parse(ts);
-            return ldt.atZone(APP_ZONE);
+            return ldt.atZone(java.time.ZoneId.systemDefault());
         } catch (java.time.format.DateTimeParseException e) {
             try {
                 java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(ts);
                 java.time.LocalDateTime ldt = odt.toLocalDateTime();
-                return ldt.atZone(APP_ZONE);
+                return ldt.atZone(java.time.ZoneId.systemDefault());
             } catch (Exception ignore) {
                 return null;
             }
@@ -204,6 +228,7 @@ public class HomeActivity extends AppCompatActivity {
         java.time.ZonedDateTime z = parseLocalIgnoringOffset(iso);
         return (z != null) ? z.format(DISP_FMT) : (iso == null ? "" : iso);
     }
+
     private void setUpcomingText(TextView tvDate, TextView tvLoc, TextView tvHost, int idx) {
         if (idx >= 0 && idx < data.length && data[idx] != null) {
             var v = data[idx];
@@ -262,7 +287,7 @@ public class HomeActivity extends AppCompatActivity {
                 main.post(() -> {
                     if (foundName != null) {
                         Spieler.appUserName = foundName;
-                        then.run(); // erst jetzt weiter
+                        then.run();
                     } else {
                         Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
                     }
@@ -273,4 +298,65 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void scheduleNotification() {
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= 33 &&
+                checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 2001);
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= 31 && am != null && !am.canScheduleExactAlarms()) {
+            Intent i = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+            startActivity(i);
+            return;
+        }
+        long millis = ((alarmTimeInSeconds - 3600) * 1000);
+//        long millis = ((alarmTimeInSeconds - 3600) * 1000)  - (1000 * 60 * 60 * 24) + (3600 * 1000) + 60000;
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(
+                this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (am != null) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pi);
+            } else {
+                am.setExact(AlarmManager.RTC_WAKEUP, millis, pi);
+            }
+        }
+    }
+
+    private void maybeScheduleNotification() {
+        if (!setNotification) return;
+
+        io.execute(() -> {
+            try {
+                String essenJson = supa.getFoodChoiceByIdAndPlayer(
+                        currentSpieltermin.termin_id, Spieler.appUserName
+                );
+
+                EssenWahl[] essenwahl = null;
+                if (essenJson != null && !essenJson.isBlank()) {
+                    essenwahl = gson.fromJson(JsonParser.parseString(essenJson), EssenWahl[].class);
+                }
+
+                final boolean shouldNotify = (essenwahl == null || essenwahl.length == 0);
+
+                main.post(() -> {
+                    if (shouldNotify) scheduleNotification();
+                    setNotification = false;
+                });
+            } catch (Exception e) {
+                main.post(() -> {
+                    Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
+                    setNotification = false;
+                });
+            }
+        });
+    }
 }

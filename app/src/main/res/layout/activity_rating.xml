@@ -107,6 +107,7 @@
                         android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvRatingHost"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/comment" />
@@ -132,6 +133,7 @@
                         android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvRatingFood"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/comment" />
@@ -157,6 +159,7 @@
                         android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvRatingEvening"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/comment"/>
