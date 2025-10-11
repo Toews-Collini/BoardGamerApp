@@ -440,33 +440,7 @@ public final class SupabaseClient {
             return body;
         }
     }
-/*
-    public String updateGespielteSpiele(long spieltermin_id, long spiel_id, String spieler_name, int spielerstimme_id) throws IOException {
-        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Gespielte_Spiele")
-                .newBuilder()
-                .addQueryParameter("spieltermin_id", "eq." + spieltermin_id)
-                .addQueryParameter("spiel_id", "eq." + spiel_id)
-                .addQueryParameter("spieler_name", "eq." + spieler_name)
-                .addQueryParameter("select", "spieltermin_id,spiel_id,spieler_name,spielerstimme_id")
-                .build();
 
-        String bodyJson = "{\"spielerstimme_id\":" + spielerstimme_id + "}";
-        Request req = new Request.Builder()
-                .url(url)
-                .patch(RequestBody.create(bodyJson, MediaType.parse("application/json")))
-                .addHeader("apikey", anonKey)              // immer anonKey hier
-                .addHeader("Authorization", authValue())   // immer USER token hier
-                .addHeader("Prefer", "return=representation,count=exact")
-                .build();
-
-        try (Response res = http.newCall(req).execute()) {
-            String body = res.body() != null ? res.body().string() : "";
-            android.util.Log.d("Update", "code=" + res.code() + " range=" + res.header("Content-Range") + " body=" + body);
-            if (!res.isSuccessful()) throw new IOException("Update failed: " + res.code() + " / " + body);
-            return body;
-        }
-    }
-*/
     public String updateGespielteSpiele(long spieltermin_id, long spiel_id, String spieler_name, int spielerstimme_id) throws IOException {
         // RPC-Args exakt wie die Funktionsparameter heißen!
         com.google.gson.JsonObject args = new com.google.gson.JsonObject();
@@ -477,6 +451,83 @@ public final class SupabaseClient {
 
         String body = callRpc("update_gespielte_spiele", args);  // POST /rest/v1/rpc/update_gespielte_spiele
         android.util.Log.d("RPC:update_gespielte_spiele", body);
+        return body;
+    }
+
+    public String getRatingByIdAndPlayer(long id, String player) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Spieleabend")
+                .newBuilder()
+                .addQueryParameter("select", "*")
+                .addQueryParameter("spieltermin_id", "eq." + id)
+                .addQueryParameter("spieler_name", "eq." + player)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", res.code() + " body=" + body);
+            if (!res.isSuccessful()) {
+                throw new IOException("Select failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+    }
+
+    public String updateSpieleabend(long spieltermin_id, String spieler_name, int host_stars, String host_comment, int food_stars, String food_comment, int evening_stars, String evening_comment) throws IOException {
+        com.google.gson.JsonObject args = new com.google.gson.JsonObject();
+        args.addProperty("termin_id", spieltermin_id);
+        args.addProperty("player_name", spieler_name);
+        args.addProperty("host_stars", host_stars);
+        args.addProperty("host_comment", host_comment);
+        args.addProperty("food_stars", food_stars);
+        args.addProperty("food_comment", food_comment);
+        args.addProperty("evening_stars", evening_stars);
+        args.addProperty("evening_comment", evening_comment);
+
+        String body = callRpc("update_spieleabend", args);  // POST /rest/v1/rpc/update_gespielte_spiele
+        android.util.Log.d("RPC:update_spieleabend", body);
+        return body;
+    }
+
+    public String getFoodChoiceByIdAndPlayer(long id, String player) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Gewaehlte_Essensrichtung")
+                .newBuilder()
+                .addQueryParameter("select", "*")
+                .addQueryParameter("spieltermin_id", "eq." + id)
+                .addQueryParameter("spieler_name", "eq." + player)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", res.code() + " body=" + body);
+            if (!res.isSuccessful()) {
+                throw new IOException("Select failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+    }
+
+    public String updateGewaehlteEssensrichtung(long spieltermin_id, String spieler_name, int food_choice) throws IOException {
+        com.google.gson.JsonObject args = new com.google.gson.JsonObject();
+        args.addProperty("termin_id", spieltermin_id);
+        args.addProperty("player_name", spieler_name);
+        args.addProperty("food_choice", food_choice);
+
+        String body = callRpc("update_gewaehlte_essensrichtung", args);  // POST /rest/v1/rpc/update_gewaehlte_essensrichtung
+        android.util.Log.d("RPC:update_gewaehlte_essensrichtung", body);
         return body;
     }
 }

@@ -100,6 +100,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void showDinner() {
         Intent i = new Intent(this, FoodActivity.class);
+        i.putExtra("spieltermin_id", termin_id);
         launcher.launch(i);
     }
 

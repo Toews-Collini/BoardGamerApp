@@ -2,6 +2,8 @@ package com.example.boardgamer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -45,6 +47,13 @@ public class LoginActivity extends AppCompatActivity {
 
         btnRegister.setOnClickListener(v -> registerUser());
         btnSignIn.setOnClickListener(v -> signIn());
+/*
+        if (Build.VERSION.SDK_INT >= 33 &&
+                checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+        }
+*/
     }
 
     private final ActivityResultLauncher<Intent> launcher =

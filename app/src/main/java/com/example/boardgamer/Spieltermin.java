@@ -8,5 +8,4 @@ public class Spieltermin {
     @SerializedName("id") public long id;
     @SerializedName("gastgeber_name") public String gastgeber_name;
     @SerializedName("termin") public String termin;
-    @SerializedName("lieferdienst_id") public long lieferdienst_id;
 }

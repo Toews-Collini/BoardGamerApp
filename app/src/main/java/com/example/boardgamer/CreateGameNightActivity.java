@@ -1,10 +1,16 @@
 package com.example.boardgamer;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +41,7 @@ public class CreateGameNightActivity extends AppCompatActivity {
     String gameNightTime = "00:00";
     Button btnEditTime;
     Button btnInsertGameNightData;
+    ImageView btnBack;
 
     private DateTimeFormatter formatter =
             DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMANY);
@@ -47,6 +54,7 @@ public class CreateGameNightActivity extends AppCompatActivity {
         gameNightDate = findViewById(R.id.editGameNightDate);
         btnInsertGameNightData = findViewById(R.id.insertGameNightDataButton);
         btnEditTime = findViewById(R.id.editTimeButton);
+        btnBack = findViewById(R.id.btnBack);
 
         btnEditTime.setOnClickListener(view -> {
             MaterialTimePicker picker = new MaterialTimePicker.Builder()
@@ -70,6 +78,7 @@ public class CreateGameNightActivity extends AppCompatActivity {
         });
 
         btnInsertGameNightData.setOnClickListener(v -> createNewGameNight());
+        btnBack.setOnClickListener(v->finish());
 
         supa = new SupabaseClient(this);
     }
@@ -90,6 +99,8 @@ public class CreateGameNightActivity extends AppCompatActivity {
             }
 
             insertNewGameNightData(zdt);
+//            scheduleNotification(zdt);
+
         } catch (DateTimeParseException e) {
             Toast.makeText(CreateGameNightActivity.this,"Ungültiges Datum! Bitte Format TT.MM.JJJJ verwenden.",Toast.LENGTH_SHORT).show();
         }
