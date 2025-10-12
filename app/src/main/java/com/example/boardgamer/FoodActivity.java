@@ -33,6 +33,7 @@ public class FoodActivity extends AppCompatActivity {
     RadioButton rbItalian;
     RadioButton rbMexican;
     RadioButton rbTurkish;
+    RadioButton rbGerman;
     Button btnSaveFoodChoice;
     ImageView btnBack;
     @Override
@@ -64,8 +65,9 @@ public class FoodActivity extends AppCompatActivity {
         spieltermin_id = intent.getLongExtra("spieltermin_id", -1);
 
         rgFoodType = findViewById(R.id.foodTypeGroup);
+        rbGerman = findViewById(R.id.germanOption);
+        rbGerman.setChecked(true);
         rbItalian = findViewById(R.id.italianOption);
-        rbItalian.setChecked(true);
         rbGreek = findViewById(R.id.greekOption);
         rbIndian = findViewById(R.id.indianOption);
         rbMexican = findViewById(R.id.mexicanOption);
@@ -99,8 +101,8 @@ public class FoodActivity extends AppCompatActivity {
                     return;
                 }
 
-                Integer choice = essenwahl[0].essensrichtung_id;
-                final int wahl = (choice == null) ? 1 : choice;
+                Long choice = essenwahl[0].essensrichtung_id;
+                final long wahl = (choice == null) ? 1 : choice;
 
                 runOnUiThread(() -> {
                     if (wahl == 1) {
@@ -117,6 +119,9 @@ public class FoodActivity extends AppCompatActivity {
                     }
                     else if (wahl == 5) {
                         rbTurkish.setChecked(true);
+                    }
+                    else if (wahl == 6) {
+                        rbGerman.setChecked(true);
                     }
                 });
             } catch (Exception e) {
@@ -143,8 +148,11 @@ public class FoodActivity extends AppCompatActivity {
         }
         else if(rbTurkish.isChecked()) {
             wahl = 5;
+        }
+        else if(rbGerman.isChecked()) {
+            wahl = 6;
         } else {
-            wahl = 1;
+            wahl = 6;
         }
 
         io.execute(() -> {

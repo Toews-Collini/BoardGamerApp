@@ -530,5 +530,29 @@ public final class SupabaseClient {
         android.util.Log.d("RPC:update_gewaehlte_essensrichtung", body);
         return body;
     }
+
+    public String getGewaehlteEssenrichtungById(long id) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/Gewaehlte_Essensrichtung")
+                .newBuilder()
+                .addQueryParameter("select", "*")
+                .addQueryParameter("spieltermin_id", "eq." + id)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .addHeader("Accept", "application/json")
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            android.util.Log.d("SupabaseClient", res.code() + " body=" + body);
+            if (!res.isSuccessful()) {
+                throw new IOException("Select failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+    }
 }
 

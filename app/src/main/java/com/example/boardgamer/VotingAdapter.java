@@ -1,4 +1,3 @@
-// VotingAdapter.java
 package com.example.boardgamer;
 
 import android.view.LayoutInflater;
