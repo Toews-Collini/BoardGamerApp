@@ -2,6 +2,7 @@ package com.example.boardgamer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -60,7 +61,13 @@ public class DashboardActivity extends AppCompatActivity {
        cvSuggestions.setOnClickListener(v -> showSuggestions());
        cvVoting.setOnClickListener(v -> showVoting());
        cvRating.setOnClickListener(v -> showRating());
-       cvDinner.setOnClickListener(v -> showDinner());
+       cvDinner.setOnClickListener(v -> {
+           if(host.equals(Spieler.appUserName)) {
+               showFoodChoices();
+           } else{
+               showDinner();
+           }
+       });
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnItemSelectedListener(item -> {
@@ -100,6 +107,12 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void showDinner() {
         Intent i = new Intent(this, FoodActivity.class);
+        i.putExtra("spieltermin_id", termin_id);
+        launcher.launch(i);
+    }
+
+    private void showFoodChoices() {
+        Intent i = new Intent(this, FoodChoiceOverview.class);
         i.putExtra("spieltermin_id", termin_id);
         launcher.launch(i);
     }
