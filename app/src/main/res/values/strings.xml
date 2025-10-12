@@ -86,4 +86,7 @@
     <string name="foodChoiceOverview">See your guests\' food choices</string>
     <string name="guestName">Guest name:</string>
     <string name="guestChoice">Food choice:</string>
+    <string name="messages_chat">Chat Messages</string>
+    <string name="sendMessage">Send</string>
+    <string name="enterMessage">Enter message</string>
 </resources>

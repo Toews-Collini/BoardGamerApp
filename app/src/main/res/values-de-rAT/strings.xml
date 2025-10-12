@@ -67,10 +67,10 @@
     <string name="ratings">Gib dein Feedback zum vergangenem Spieleabend</string>
     <string name="foodChoice">Wähle deine Lieblingsessensrichtung</string>
     <string name="save_foodChoice">Essensrichtung speichern</string>
-    <string name="loading_failed">Loading failed</string>
-    <string name="no_data">No data</string>
-    <string name="insert_error">Insert error</string>
-    <string name="data_saved">Data saved</string>
+    <string name="loading_failed">Laden fehlgeschlagen</string>
+    <string name="no_data">Keine Daten vorhanden</string>
+    <string name="insert_error">Fehler beim Einfügen</string>
+    <string name="data_saved">Daten gespeichert</string>
     <string name="votingDescription">Klicke auf das Daumen-Symbol, um zwischen gefällt mir, neutral und gefällt mir nicht zu wechseln</string>
     <string name="comment">Kommentar</string>
     <string name="german">Deutsch</string>
@@ -82,4 +82,7 @@
     <string name="foodChoiceOverview">Sieh die Essenswünsche deiner Gäste</string>
     <string name="guestName">Gästename:</string>
     <string name="guestChoice">Essensrichtung:</string>
+    <string name="messages_chat">Chat-Nachrichten</string>
+    <string name="sendMessage">"Senden "</string>
+    <string name="enterMessage">Nachricht eingeben</string>
 </resources>
