@@ -35,7 +35,7 @@ public class FoodActivity extends AppCompatActivity {
     RadioButton rbTurkish;
     RadioButton rbGerman;
     Button btnSaveFoodChoice;
-    ImageView btnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +72,6 @@ public class FoodActivity extends AppCompatActivity {
         rbIndian = findViewById(R.id.indianOption);
         rbMexican = findViewById(R.id.mexicanOption);
         rbTurkish = findViewById(R.id.turkishOption);
-
-        btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v-> finish());
 
         btnSaveFoodChoice = findViewById(R.id.saveFoodChoiceButton);
         btnSaveFoodChoice.setOnClickListener(v -> saveFoodChoice());

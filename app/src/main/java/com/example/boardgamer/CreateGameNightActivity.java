@@ -41,7 +41,6 @@ public class CreateGameNightActivity extends AppCompatActivity {
     String gameNightTime = "00:00";
     Button btnEditTime;
     Button btnInsertGameNightData;
-    ImageView btnBack;
 
     private DateTimeFormatter formatter =
             DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMANY);
@@ -54,7 +53,6 @@ public class CreateGameNightActivity extends AppCompatActivity {
         gameNightDate = findViewById(R.id.editGameNightDate);
         btnInsertGameNightData = findViewById(R.id.insertGameNightDataButton);
         btnEditTime = findViewById(R.id.editTimeButton);
-        btnBack = findViewById(R.id.btnBack);
 
         btnEditTime.setOnClickListener(view -> {
             MaterialTimePicker picker = new MaterialTimePicker.Builder()
@@ -78,7 +76,6 @@ public class CreateGameNightActivity extends AppCompatActivity {
         });
 
         btnInsertGameNightData.setOnClickListener(v -> createNewGameNight());
-        btnBack.setOnClickListener(v->finish());
 
         supa = new SupabaseClient(this);
     }

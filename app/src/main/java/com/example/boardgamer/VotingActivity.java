@@ -31,7 +31,6 @@ public class VotingActivity extends AppCompatActivity {
     private final Gson gson = new Gson();
     BottomNavigationView bottomNavigation;
     Button btnSaveVoting;
-    ImageView ivBack;
     RecyclerView rvVoting;
     VotingAdapter adapter;
     @Override
@@ -62,11 +61,9 @@ public class VotingActivity extends AppCompatActivity {
         spieltermin_id = intent.getLongExtra("spieltermin_id", -1);
 
         btnSaveVoting = findViewById(R.id.saveVoting);
-        ivBack = findViewById(R.id.btnBack);
         rvVoting = findViewById(R.id.votingRecyclerView);
 
         btnSaveVoting.setOnClickListener(v -> saveVoting());
-        ivBack.setOnClickListener(v -> finish());
 
         adapter = new VotingAdapter();
         rvVoting.setLayoutManager(new LinearLayoutManager(this));

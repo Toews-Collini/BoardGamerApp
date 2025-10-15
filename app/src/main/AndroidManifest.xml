@@ -71,6 +71,7 @@
             android:name=".RatingActivity"
             android:exported="false"
             android:theme="@style/Theme.BoardGamer"
+            android:windowSoftInputMode="adjustResize"
             />
         <activity
             android:name=".VotingActivity"

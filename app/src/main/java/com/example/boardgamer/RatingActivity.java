@@ -42,7 +42,6 @@ public class RatingActivity extends AppCompatActivity {
     RatingBar rbEvening;
     EditText etEvening;
     Button btnSaveRating;
-    ImageView btnBack;
     int loading_tries = 0;
 
     @Override
@@ -79,9 +78,6 @@ public class RatingActivity extends AppCompatActivity {
         etFood = findViewById(R.id.tvRatingFood);
         rbEvening = findViewById(R.id.ratingBarEvening);
         etEvening = findViewById(R.id.tvRatingEvening);
-
-        btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v-> finish());
 
         btnSaveRating = findViewById(R.id.ratingButton);
         btnSaveRating.setOnClickListener(v -> saveRatings());
