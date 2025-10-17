@@ -26,6 +26,7 @@ public class FoodActivity extends AppCompatActivity {
     long spieltermin_id;
     int loading_tries;
     private final Gson gson = new Gson();
+    EssenWahl[] essenwahl;
     BottomNavigationView bottomNavigation;
     RadioGroup rgFoodType;
     RadioButton rbGreek;
@@ -84,17 +85,8 @@ public class FoodActivity extends AppCompatActivity {
         io.execute(() -> {
             try {
                 String essenJson = supa.getFoodChoiceByIdAndPlayer(spieltermin_id, Spieler.appUserName);
-                EssenWahl[] essenwahl = gson.fromJson(JsonParser.parseString(essenJson), EssenWahl[].class);
+                essenwahl = gson.fromJson(JsonParser.parseString(essenJson), EssenWahl[].class);
                 if (essenwahl == null || essenwahl.length == 0) {
-                    essenwahl = new EssenWahl[0];
-                    com.google.gson.JsonObject row = new com.google.gson.JsonObject();
-                    row.addProperty("spieltermin_id", spieltermin_id);
-                    row.addProperty("spieler_name", Spieler.appUserName);
-                    row.addProperty("essensrichtung_id", 1);
-
-                    supa.insert("Gewaehlte_Essensrichtung",row);
-                    loadFoodChoice();
-                    runOnUiThread(() -> rbItalian.setChecked(true));
                     return;
                 }
 
@@ -122,7 +114,7 @@ public class FoodActivity extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
-                main.post(() -> Toast.makeText(this, "Fehler: " + e.getClass().getSimpleName(), Toast.LENGTH_LONG).show());
+                main.post(() -> Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_LONG).show());
                 android.util.Log.e("loadFoodChoice", "Unerwarteter Fehler", e);
             }
         });
@@ -153,6 +145,20 @@ public class FoodActivity extends AppCompatActivity {
         }
 
         io.execute(() -> {
+            try {
+                if (essenwahl == null || essenwahl.length == 0) {
+                    com.google.gson.JsonObject row = new com.google.gson.JsonObject();
+                    row.addProperty("spieltermin_id", spieltermin_id);
+                    row.addProperty("spieler_name", Spieler.appUserName);
+                    row.addProperty("essensrichtung_id", wahl);
+
+                    supa.insert("Gewaehlte_Essensrichtung", row);
+                    loadFoodChoice();
+                }
+            } catch (Exception e) {
+                main.post(() -> Toast.makeText(this, R.string.insert_error, Toast.LENGTH_LONG).show());
+                android.util.Log.e("saveFoodChoice (UPDATE)", "Unerwarteter Fehler", e);
+            }
             try {
                 supa.updateGewaehlteEssensrichtung(spieltermin_id, Spieler.appUserName, wahl);
                 main.post(() -> {

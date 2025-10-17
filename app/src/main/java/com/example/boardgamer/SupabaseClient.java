@@ -39,8 +39,10 @@ public final class SupabaseClient {
         this.refreshToken = AuthStore.loadRefresh(this.appCtx);
     }
 
+/*
     public void setAccessToken(String token) { this.accessToken = token; }
     public boolean isAuthenticated() { return accessToken != null && !accessToken.isEmpty(); }
+ */
 
     private String authValue() {
         if (accessToken == null || accessToken.isEmpty())
@@ -79,7 +81,7 @@ public final class SupabaseClient {
             return true;
         }
     }
-
+/*
     public boolean refreshSession() throws IOException {
         if (refreshToken == null || refreshToken.isEmpty()) return false;
 
@@ -108,7 +110,7 @@ public final class SupabaseClient {
             return true;
         }
     }
-
+*/
     // Signup -> /auth/v1/signup
     public boolean signUp(String email, String password) throws IOException {
         String url = baseUrl + "/auth/v1/signup";
@@ -191,6 +193,35 @@ public final class SupabaseClient {
             return body;
         }
     }
+
+    public String selectAllOrderById(String table) throws IOException {
+        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
+                .newBuilder()
+                .addQueryParameter("select", "*")
+                .addQueryParameter("order", "id.asc")
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", anonKey)
+                .addHeader("Authorization", authValue())
+                .get()
+                .build();
+
+        try (Response res = http.newCall(req).execute()) {
+            String body = res.body() != null ? res.body().string() : "";
+            errorCode = res.code();
+            android.util.Log.d("SupabaseClient SelectAllMessages",
+                    "SELECT " + table + " -> status=" + res.code() + " body=" + body);
+
+            if (!res.isSuccessful()) {
+                this.lastErrorBody = body;
+                throw new IOException("Select " + table + " failed: " + res.code() + " / " + body);
+            }
+            return body;
+        }
+    }
+
     public String insert(String table, JsonObject row) throws IOException {
         String url = baseUrl + "/rest/v1/" + table;
 
@@ -216,7 +247,7 @@ public final class SupabaseClient {
             return body;
         }
     }
-
+/*
     public String updateById(String table, String idColumn, long id, JsonObject patch) throws IOException {
         HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
                 .newBuilder()
@@ -287,7 +318,7 @@ public final class SupabaseClient {
             }
         }
     }
-
+*/
     public String callRpc(String function, com.google.gson.JsonObject args) throws IOException {
         String url = baseUrl + "/rest/v1/rpc/" + function;
         okhttp3.Request req = new okhttp3.Request.Builder()

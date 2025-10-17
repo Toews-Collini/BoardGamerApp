@@ -1,80 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/messageRecyclerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_blue"
-    android:padding="8dp">
+    android:layout_height="90sp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:clipChildren="false"
+    android:paddingStart="16dp"
+    android:paddingEnd="12dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cardOther"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:layout_width="200sp"
+        android:layout_height="80sp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardElevation="4dp"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="12dp"
         app:cardCornerRadius="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:backgroundTint="@color/white"
+        android:layout_gravity="start"
+        android:translationX="0dp" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+        <TextView
+            android:id="@+id/messageTextOther"
+            android:layout_width="200sp"
+            android:layout_height="match_parent"
+            android:maxWidth="280dp"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/nameOther"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:id="@+id/messageTextOther"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"/>
-        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardOwn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200sp"
+        android:layout_height="80sp"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:paddingRight="12dp"
         android:backgroundTint="@color/gray"
+        android:translationX="-90dp"
         app:cardCornerRadius="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardElevation="6dp" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+        <TextView
+            android:id="@+id/messageTextOwn"
+            android:layout_width="200sp"
+            android:layout_height="match_parent"
+            android:maxWidth="280dp"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/nameOwn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:id="@+id/messageTextOwn"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

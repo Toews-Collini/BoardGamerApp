@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     private SpieleabendView[] data = new SpieleabendView[0];
     private SpieleabendView currentSpieltermin = new SpieleabendView();
     private int index = 0;
+    private int lastIndex = 0;
     private boolean setNotification = false;
     long alarmTimeInSeconds = 0;
     // Views
@@ -51,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnViewDetails;
     private Button btnNewGameNight;
      private ImageView imgBtnPrevious;
-//     private ImageButton imgBtnNext;
+     private ImageView imgBtnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +91,8 @@ public class HomeActivity extends AppCompatActivity {
 
         btnViewDetails = findViewById(R.id.btnViewDetails);
         btnNewGameNight = findViewById(R.id.newGameNightButton);
-         imgBtnPrevious = findViewById(R.id.btnBack);
-//         imgBtnNext = findViewById(R.id.imgBtnNext);
+        imgBtnPrevious = findViewById(R.id.btnBack);
+        imgBtnNext = findViewById(R.id.btnNext);
 
         btnViewDetails.setOnClickListener(v -> showViewDetails());
         btnNewGameNight.setOnClickListener(v -> createGameNight());
@@ -99,15 +100,15 @@ public class HomeActivity extends AppCompatActivity {
         imgBtnPrevious.setOnClickListener(v -> {
             if (data.length == 0) return;
             index = Math.max(0, index - 1);
-            render(false); // <-- vergangene Termine zulassen
+            render(false);
         });
-/*
+
         imgBtnNext.setOnClickListener(v -> {
             if (data.length == 0) return;
-            index = Math.min(data.length - 1, index + 1);
-            render(true);  // <-- bei Next Zukunft erzwingen (überspringt ggf. vergangene)
+            index = Math.min(lastIndex, index + 1);
+            render(false);
         });
-*/
+
         btnNewGameNight.setOnClickListener(v -> createGameNight());
         setAppUserName(() -> {
             currentSpieltermin.termin_id = -1;
@@ -169,12 +170,14 @@ public class HomeActivity extends AppCompatActivity {
                     alarmTimeInSeconds = WhenInseconds;
                     setNotification = true;
                 }
-
+                lastIndex = index;
                 break;
             }
             index++;
         }
-        if (index >= data.length) index = Math.max(0, data.length - 1);
+        if (index >= data.length) {
+            index = Math.max(0, data.length - 1);
+        }
     }
 
     private void render(boolean enforceFuture) {
@@ -183,15 +186,15 @@ public class HomeActivity extends AppCompatActivity {
             nextGameNightDate1.setText(""); nextGameNightDate2.setText(""); nextGameNightDate3.setText("");
             nextGameNightLocation1.setText(""); nextGameNightLocation2.setText(""); nextGameNightLocation3.setText("");
             nextGameNightHost1.setText(""); nextGameNightHost2.setText(""); nextGameNightHost3.setText("");
-             imgBtnPrevious.setEnabled(false);
-//             imgBtnNext.setEnabled(false);
+            imgBtnPrevious.setEnabled(false);
+            imgBtnNext.setEnabled(false);
             return;
         }
 
         if (enforceFuture) ensureCurrentIsFuture();
 
         if (index < 0) index = 0;
-        if (index >= data.length) index = data.length - 1;
+        if (index >= lastIndex) index = lastIndex;
 
         currentSpieltermin = data[index];
         gameNightDate.setText("Game Night Date: " + fmtLocal(currentSpieltermin.termin));
@@ -205,7 +208,7 @@ public class HomeActivity extends AppCompatActivity {
         maybeScheduleNotification();
 
         imgBtnPrevious.setEnabled(index > 0);
-//        imgBtnNext.setEnabled(index < data.length - 1);
+        imgBtnNext.setEnabled(index < lastIndex);
     }
 
     private java.time.ZonedDateTime parseLocalIgnoringOffset(String ts) {
@@ -313,8 +316,9 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(i);
             return;
         }
-        long millis = ((alarmTimeInSeconds - 3600) * 1000);
-//        long millis = ((alarmTimeInSeconds - 3600) * 1000)  - (1000 * 60 * 60 * 24) + (3600 * 1000) + 60000;
+
+        long millis = (alarmTimeInSeconds + 10) * 1000;
+//        long millis = ((alarmTimeInSeconds - 3600) * 1000);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(
@@ -332,7 +336,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void maybeScheduleNotification() {
-        if (!setNotification) return;
+//        if (!setNotification) return;
 
         io.execute(() -> {
             try {

@@ -90,4 +90,5 @@
     <string name="messages_chat">Chat Messages</string>
     <string name="sendMessage">Send</string>
     <string name="enterMessage">Enter message</string>
+    <string name="no_settings_available">No settings available</string>
 </resources>

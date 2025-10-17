@@ -36,12 +36,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Notification erstellen
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.board_gamer_app_logo) // eigenes Icon
-                .setContentTitle("Erinnerung")
-                .setContentText("BoardGamerApp")
+                .setContentTitle("BoardGamerApp")
+                .setContentText("Don\'t forget - Choose your favorite cuisine for the next game night.")
                 .setPriority(NotificationCompat.PRIORITY_HIGH) // Heads-up
                 .setColor(Color.BLUE)
                 .setAutoCancel(true)
-                .addAction(R.drawable.thumbs_up, "Bestätigen", confirmPendingIntent)
+                .addAction(R.drawable.thumbs_up, "Confirm", confirmPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL); // Ton/Vibration
 
         NotificationManagerCompat.from(context).notify(NOTIF_ID, builder.build());
