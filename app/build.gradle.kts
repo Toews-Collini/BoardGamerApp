@@ -37,7 +37,6 @@ android {
         jvmTarget = "11" // Stelle sicher, dass Kotlin die gleiche JVM-Version wie Java verwendet
     }
     buildFeatures {
-        dataBinding = true
         compose = true
         viewBinding = true
     }
@@ -75,7 +74,7 @@ dependencies {
     implementation(libs.appcompat.v151)
     implementation(libs.constraintlayout.v213)
 
-    //MEINE EINTRÄGE:
+    //Database Modules:
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.code.gson:gson:2.11.0")
 }

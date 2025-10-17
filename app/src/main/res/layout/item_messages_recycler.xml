@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/messageRecyclerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="90sp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:clipChildren="false"
+    android:paddingStart="16dp"
+    android:paddingEnd="12dp">
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cvMessageOthers"
+        android:layout_width="200sp"
+        android:layout_height="80sp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardElevation="4dp"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="12dp"
+        app:cardCornerRadius="16dp"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="start"
+        android:translationX="0dp" >
+
+        <TextView
+            android:id="@+id/messageTextOthers"
+            android:layout_width="200sp"
+            android:layout_height="match_parent"
+            android:maxWidth="280dp"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvMessageOwn"
+        android:layout_width="200sp"
+        android:layout_height="80sp"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:paddingRight="12dp"
+        android:backgroundTint="@color/gray"
+        android:translationX="-90dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp" >
+
+        <TextView
+            android:id="@+id/messageTextOwn"
+            android:layout_width="200sp"
+            android:layout_height="match_parent"
+            android:maxWidth="280dp"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</LinearLayout>

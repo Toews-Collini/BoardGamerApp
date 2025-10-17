@@ -49,7 +49,6 @@ public class FoodChoiceOverview extends AppCompatActivity {
     long spieltermin_id;
     private final Gson gson = new Gson();
     BottomNavigationView bottomNavigation;
-    ImageView ivBack;
     RecyclerView rvFoodChoices;
     FoodChoiceAdapter adapter;
 
@@ -86,10 +85,7 @@ public class FoodChoiceOverview extends AppCompatActivity {
         Intent intent = getIntent();
         spieltermin_id = intent.getLongExtra("spieltermin_id", -1);
 
-        ivBack = findViewById(R.id.btnBack);
         rvFoodChoices = findViewById(R.id.foodChoiceRecyclerView);
-
-        ivBack.setOnClickListener(v -> finish());
 
         adapter = new FoodChoiceAdapter(new ArrayList<>());
         rvFoodChoices.setLayoutManager(new LinearLayoutManager(this));

@@ -32,7 +32,6 @@ public class SuggestionsActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     EditText etSuggestion;
     Button btnAddSuggestion;
-    ImageView ivBack;
     RecyclerView rvSuggestions;
     SuggestionAdapter adapter;
 
@@ -65,11 +64,9 @@ public class SuggestionsActivity extends AppCompatActivity {
 
         etSuggestion = findViewById(R.id.suggestionInput);
         btnAddSuggestion = findViewById(R.id.btnAddSuggestion);
-        ivBack = findViewById(R.id.btnBack);
         rvSuggestions = findViewById(R.id.suggestionsList);
 
         btnAddSuggestion.setOnClickListener(v -> addSuggestion(etSuggestion.getText().toString().trim()));
-        ivBack.setOnClickListener(v -> finish());
 
         adapter = new SuggestionAdapter(new ArrayList<>());
         rvSuggestions.setLayoutManager(new LinearLayoutManager(this));

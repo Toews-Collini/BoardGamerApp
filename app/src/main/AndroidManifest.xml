@@ -83,6 +83,11 @@
             android:theme="@style/Theme.BoardGamer"
             android:windowSoftInputMode="adjustResize"/>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BoardGamer" />
+
         <receiver android:name=".AlarmReceiver" android:exported="true"/>
         <receiver android:name=".NotificationActionReceiver" android:exported="true"/>
     </application>
