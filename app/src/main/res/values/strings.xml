@@ -84,6 +84,7 @@
     <string name="indian">Indian</string>
     <string name="mexican">Mexican</string>
     <string name="foodChoiceOverview">See your guests\' food choices</string>
+    <string name="foodReminder">Don\'t forget - Choose your favorite cuisine for the next game night.</string>
     <string name="guestName">Guest name:</string>
     <string name="guestChoice">Food choice:</string>
     <string name="messages_chat">Chat Messages</string>

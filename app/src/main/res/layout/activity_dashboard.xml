@@ -111,8 +111,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
-    <!-- CARD 1 -->
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
         android:layout_width="308dp"
@@ -166,7 +164,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- CARD 2 -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card2"
         android:layout_width="120dp"
@@ -202,7 +199,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- CARD 3 -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card3"
         android:layout_width="120dp"
@@ -238,7 +234,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- CARD 4 -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card4"
         android:layout_width="120dp"
@@ -286,7 +281,6 @@
         app:itemTextAppearanceActiveBoldEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu"
         tools:ignore="VisualLintBottomNav"

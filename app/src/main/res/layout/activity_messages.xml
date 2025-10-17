@@ -14,22 +14,27 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
         android:contentDescription="@string/app_logo"
-        android:src="@drawable/board_gamer_app_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.067"
+        app:srcCompat="@drawable/board_gamer_app_logo" />
 
     <ImageView
         android:id="@+id/userIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="32dp"
         android:contentDescription="@string/userIcon"
-        android:src="@drawable/user_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.869"
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.091"
+        app:srcCompat="@drawable/user_icon" />
 
     <TextView
         android:id="@+id/messages_chat"
@@ -65,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/background_blue"
         android:padding="12dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
@@ -102,11 +107,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:visibility="visible"
+        app:itemActiveIndicatorStyle="@style/CustomActiveIndicator"
         app:itemIconSize="22dp"
         app:itemRippleColor="@color/mid_blue"
         app:itemTextAppearanceActiveBoldEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        tools:ignore="VisualLintBottomNav"
+        tools:visibility="visible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

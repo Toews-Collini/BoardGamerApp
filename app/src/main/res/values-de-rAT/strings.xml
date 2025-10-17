@@ -80,6 +80,7 @@
     <string name="indian">Indisch</string>
     <string name="mexican">Mexikanisch</string>
     <string name="foodChoiceOverview">Sieh die Essenswünsche deiner Gäste</string>
+    <string name="foodReminder">Vergiss nicht - Wähle deine Lieblingsküche für den nächsten Spieleabend.</string>
     <string name="guestName">Gästename:</string>
     <string name="guestChoice">Essensrichtung:</string>
     <string name="messages_chat">Chat-Nachrichten</string>
