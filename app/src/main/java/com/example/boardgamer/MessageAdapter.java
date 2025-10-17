@@ -40,9 +40,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.VH> {
 
         VH(@NonNull View itemView) {
             super(itemView);
-            cvOthers = itemView.findViewById(R.id.cvMessageOthers);
-            cvOwn = itemView.findViewById(R.id.cvMessageOwn);
-            tvOthers = itemView.findViewById(R.id.messageTextOthers);
+            cvOthers = itemView.findViewById(R.id.cardOther);
+            cvOwn = itemView.findViewById(R.id.cardOwn);
+            tvOthers = itemView.findViewById(R.id.messageTextOther);
             tvOwn = itemView.findViewById(R.id.messageTextOwn);
 
             tvOthers.setMovementMethod(new ScrollingMovementMethod());;
