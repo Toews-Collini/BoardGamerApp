@@ -91,12 +91,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.VH> {
         // Sichtbarkeit steuern
         if (msg.isOwn) {
             h.cvOwn.setVisibility(View.VISIBLE);
-            h.cvOthers.setVisibility(View.INVISIBLE);
+            h.cvOthers.setVisibility(View.GONE);
             h.tvOwn.setText(msg.text);
             h.tvOwn.scrollTo(0, 0);
         } else {
             h.cvOthers.setVisibility(View.VISIBLE);
-            h.cvOwn.setVisibility(View.INVISIBLE);
+            h.cvOwn.setVisibility(View.GONE);
             h.tvOthers.setText(msg.text);
             h.tvOthers.scrollTo(0, 0);
         }
