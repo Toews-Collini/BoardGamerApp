@@ -61,6 +61,20 @@
         app:layout_constraintTop_toBottomOf="@+id/foodChoice"
         app:layout_constraintVertical_bias="0.087" />
 
+    <TextView
+        android:id="@+id/majorityFoodChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:gravity="center"
+        android:text="@string/majorityFoodChoice"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.203"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/foodChoiceRecyclerView" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
