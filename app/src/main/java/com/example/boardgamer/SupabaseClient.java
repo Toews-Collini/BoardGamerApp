@@ -81,36 +81,7 @@ public final class SupabaseClient {
             return true;
         }
     }
-/*
-    public boolean refreshSession() throws IOException {
-        if (refreshToken == null || refreshToken.isEmpty()) return false;
 
-        HttpUrl url = HttpUrl.parse(baseUrl + "/auth/v1/token")
-                .newBuilder().addQueryParameter("grant_type", "refresh_token").build();
-
-        JsonObject body = new JsonObject();
-        body.addProperty("refresh_token", refreshToken);
-
-        Request req = new Request.Builder()
-                .url(url)
-                .addHeader("apikey", anonKey)
-                .addHeader("Content-Type", "application/json")
-                .post(RequestBody.create(body.toString(), MediaType.get("application/json")))
-                .build();
-
-        try (Response res = http.newCall(req).execute()) {
-            if (!res.isSuccessful()) return false;
-
-            JsonObject json = gson.fromJson(res.body().string(), JsonObject.class);
-            this.accessToken  = json.get("access_token").getAsString();
-            this.refreshToken = json.get("refresh_token").getAsString();
-
-            // ➜ nach Refresh wieder speichern
-            AuthStore.saveTokens(appCtx, accessToken, refreshToken);
-            return true;
-        }
-    }
-*/
     // Signup -> /auth/v1/signup
     public boolean signUp(String email, String password) throws IOException {
         String url = baseUrl + "/auth/v1/signup";
@@ -247,78 +218,7 @@ public final class SupabaseClient {
             return body;
         }
     }
-/*
-    public String updateById(String table, String idColumn, long id, JsonObject patch) throws IOException {
-        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
-                .newBuilder()
-                .addQueryParameter(idColumn, "eq." + id)
-                .build();
 
-        Request req = new Request.Builder()
-                .url(url)
-                .addHeader("apikey", anonKey)
-                .addHeader("Authorization", authValue())
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Prefer", "return=representation")
-                .patch(RequestBody.create(patch.toString(), MediaType.get("application/json")))
-                .build();
-
-        try (Response res = http.newCall(req).execute()) {
-            String body = res.body() != null ? res.body().string() : "";
-            this.errorCode = res.code();
-            if (!res.isSuccessful()) {
-                throw new IOException("Update " + table + " failed: " + res.code() + " / " + body);
-            }
-            return body;
-        }
-    }
-
-    public String updateById(String table, String idColumn, String pk, JsonObject patch) throws IOException {
-        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
-                .newBuilder()
-                .addQueryParameter(idColumn, "eq." + pk)
-                .build();
-
-        Request req = new Request.Builder()
-                .url(url)
-                .addHeader("apikey", anonKey)
-                .addHeader("Authorization", authValue())
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Prefer", "return=representation")
-                .patch(RequestBody.create(patch.toString(), MediaType.get("application/json")))
-                .build();
-
-        try (Response res = http.newCall(req).execute()) {
-            String body = res.body() != null ? res.body().string() : "";
-            this.errorCode = res.code();
-            if (!res.isSuccessful()) {
-                throw new IOException("Update " + table + " failed: " + res.code() + " / " + body);
-            }
-            return body;
-        }
-    }
-
-    public void deleteById(String table, String idColumn, long id) throws IOException {
-        HttpUrl url = HttpUrl.parse(baseUrl + "/rest/v1/" + table)
-                .newBuilder()
-                .addQueryParameter(idColumn, "eq." + id)
-                .build();
-
-        Request req = new Request.Builder()
-                .url(url)
-                .addHeader("apikey", anonKey)
-                .addHeader("Authorization", authValue())
-                .delete()
-                .build();
-
-        try (Response res = http.newCall(req).execute()) {
-            this.errorCode = res.code();
-            if (!res.isSuccessful()) {
-                throw new IOException("Delete " + table + " failed: " + res.code() + " / " + (res.body() != null ? res.body().string() : ""));
-            }
-        }
-    }
-*/
     public String callRpc(String function, com.google.gson.JsonObject args) throws IOException {
         String url = baseUrl + "/rest/v1/rpc/" + function;
         okhttp3.Request req = new okhttp3.Request.Builder()
@@ -373,7 +273,7 @@ public final class SupabaseClient {
         okhttp3.HttpUrl url = okhttp3.HttpUrl
                 .parse(baseUrl + "/rest/v1/v_latest_spieltermin_gastgeber")
                 .newBuilder()
-                .addQueryParameter("select", "gastgeber_name")
+                .addQueryParameter("select", "name")
                 .build();
 
         okhttp3.Request req = new okhttp3.Request.Builder()
@@ -584,6 +484,17 @@ public final class SupabaseClient {
             }
             return body;
         }
+    }
+
+    public String updateSpielerWarGastgeber(String player_name, boolean is_host) throws IOException {
+        // RPC-Args exakt wie die Funktionsparameter heißen!
+        com.google.gson.JsonObject args = new com.google.gson.JsonObject();
+        args.addProperty("player_name", player_name);
+        args.addProperty("is_host", is_host);
+
+        String body = callRpc("update_spieler_war_gastgeber", args);  // POST /rest/v1/rpc/update_spieler_war_gastgeber
+        android.util.Log.d("RPC:update_spieler_war_gastgeber", body);
+        return body;
     }
 }
 
