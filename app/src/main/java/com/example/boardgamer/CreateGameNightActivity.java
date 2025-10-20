@@ -109,14 +109,23 @@ public class CreateGameNightActivity extends AppCompatActivity {
 
         io.execute(() -> {
             try {
-                String spielerJson = supa.selectAll("Spieler");
-                com.google.gson.JsonElement root = com.google.gson.JsonParser.parseString(spielerJson);
-                Spieler[] spielerArray = gson.fromJson(root, Spieler[].class);
-                if (spielerArray == null || spielerArray.length == 0)
-                    throw new IllegalStateException("Keine Spieler gefunden.");
-
                 String gastgeberJson = supa.selectLastGastgeberView();
+                com.google.gson.JsonElement root = com.google.gson.JsonParser.parseString(gastgeberJson);
+                Spieler[] spielerArray = gson.fromJson(root, Spieler[].class);
+                if (spielerArray == null || spielerArray.length == 0) {
+                    String spielerJson = supa.selectAll("Spieler");
+                    com.google.gson.JsonElement spielerRoot = com.google.gson.JsonParser.parseString(spielerJson);
+                    spielerArray = gson.fromJson(spielerRoot, Spieler[].class);
+                    if (spielerArray == null || spielerArray.length == 0) {
+                        Toast.makeText(this, R.string.no_data, Toast.LENGTH_SHORT).show();
+                        throw new IllegalStateException("Keine Spieler gefunden.");
+                    }
+                    for (Spieler spieler : spielerArray) {
+                        supa.updateSpielerWarGastgeber(spieler.name, false);
+                    }
+                }
                 String nextGastgeber = spielerArray[0].name;
+                supa.updateSpielerWarGastgeber(spielerArray[0].name, true);
 
                 com.google.gson.JsonElement gastgeberRoot = com.google.gson.JsonParser.parseString(gastgeberJson);
                 com.google.gson.JsonArray spielterminArr = gastgeberRoot.getAsJsonArray();
