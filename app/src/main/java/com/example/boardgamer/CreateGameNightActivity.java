@@ -109,7 +109,7 @@ public class CreateGameNightActivity extends AppCompatActivity {
 
         io.execute(() -> {
             try {
-                String gastgeberJson = supa.selectLastGastgeberView();
+                String gastgeberJson = supa.getHostForGameNight();
                 com.google.gson.JsonElement root = com.google.gson.JsonParser.parseString(gastgeberJson);
                 Spieler[] spielerArray = gson.fromJson(root, Spieler[].class);
                 if (spielerArray == null || spielerArray.length == 0) {

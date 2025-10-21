@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 
@@ -24,6 +27,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +55,7 @@ public class FoodChoiceOverview extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     RecyclerView rvFoodChoices;
     FoodChoiceAdapter adapter;
+    TextView tvMajorityFoodChoice;
 
     private class CardItem {
         String guestname;
@@ -86,6 +91,7 @@ public class FoodChoiceOverview extends AppCompatActivity {
         spieltermin_id = intent.getLongExtra("spieltermin_id", -1);
 
         rvFoodChoices = findViewById(R.id.foodChoiceRecyclerView);
+        tvMajorityFoodChoice = findViewById(R.id.majorityFoodChoice);
 
         adapter = new FoodChoiceAdapter(new ArrayList<>());
         rvFoodChoices.setLayoutManager(new LinearLayoutManager(this));
@@ -128,22 +134,54 @@ public class FoodChoiceOverview extends AppCompatActivity {
                     essensrichtungArray = new Essensrichtung[0];
                 }
 
-                java.util.HashMap<Long,String> id2name = new java.util.HashMap<>();
-                for (Essensrichtung s : essensrichtungArray) id2name.put(s.id, s.bezeichnung);
+                java.util.HashMap<Long, String> id2name = new java.util.HashMap<>();
+                for (Essensrichtung s : essensrichtungArray)
+                    id2name.put(s.id, s.bezeichnung);
+
+                ArrayList<Integer> foodChoices = new ArrayList<>(essensrichtungArray.length);
+                for (int i = 0; i < essensrichtungArray.length; i++) {
+                    foodChoices.add(0);
+                }
+
                 java.util.List<CardItem> items = new java.util.ArrayList<>();
+
                 for (EssenWahl w : wahl) {
                     FoodChoiceOverview.CardItem cardItem = new CardItem();
-                    String foodName = "";
-                    foodName = id2name.get(w.essensrichtung_id);
+                    String foodName = id2name.get(w.essensrichtung_id);
+
+                    int foodChoicesIndex = (int) w.essensrichtung_id - 1;
+                    foodChoices.set(foodChoicesIndex, foodChoices.get(foodChoicesIndex) + 1);
+
                     cardItem.guestname = w.spieler_name;
                     cardItem.foodChoice = foodName;
                     items.add(cardItem);
                 }
 
+                int max = Collections.max(foodChoices);
+
+                List<Integer> winners = new ArrayList<>();
+                for (int i = 0; i < foodChoices.size(); i++) {
+                    if (foodChoices.get(i) == max) {
+                        winners.add(i);
+                    }
+                }
+
+                String text;
+                if (winners.size() == 1) {
+                    int winnerIndex = winners.get(0);
+                    long id = winnerIndex + 1L;
+                    String name = id2name.get(id);
+                    text = getString(R.string.majorityFoodChoice) + "\n" + name;
+                } else {
+                    text = getString(R.string.majorityFoodChoice) + "\n" + getString(R.string.drawn);
+                }
+
+                String finalText = text;
                 main.post(() -> {
                     for (CardItem i : items) {
                         int pos = adapter.addFoodChoice("Guest name: " + i.guestname, "Food choice: " + i.foodChoice);
                     }
+                    tvMajorityFoodChoice.setText(finalText);
                 });
 
             } catch (Exception e) {

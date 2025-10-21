@@ -269,9 +269,9 @@ public final class SupabaseClient {
         }
     }
 
-    public String selectLastGastgeberView() throws IOException {
+    public String getHostForGameNight() throws IOException {
         okhttp3.HttpUrl url = okhttp3.HttpUrl
-                .parse(baseUrl + "/rest/v1/v_latest_spieltermin_gastgeber")
+                .parse(baseUrl + "/rest/v1/v_get_host_for_game_night")
                 .newBuilder()
                 .addQueryParameter("select", "name")
                 .build();
@@ -290,7 +290,7 @@ public final class SupabaseClient {
 
             if (!res.isSuccessful()) {
                 this.lastErrorBody = body;
-                throw new IOException("HTTP " + res.code() + " on GET v_latest_spieltermin_gastgeber");
+                throw new IOException("HTTP " + res.code() + " on GET v_get_host_for_game_night");
             }
 
             this.lastErrorBody = null;

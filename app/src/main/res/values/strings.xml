@@ -92,4 +92,5 @@
     <string name="enterMessage">Enter message</string>
     <string name="no_settings_available">No settings available</string>
     <string name="majorityFoodChoice">Majority food choice:</string>
+    <string name="drawn">No identifiable majority</string>
 </resources>
