@@ -54,9 +54,9 @@ public class DashboardActivity extends AppCompatActivity {
        cvRating = findViewById(R.id.card3);
        cvDinner = findViewById(R.id.card4);
 
-       gameNightDate.setText("Game Night date: " + formattedDate);
-       gameNightLocation.setText("Game Night location: " + location);
-       gameNightHost.setText("Game Night host: " + host);
+       gameNightDate.setText((getString(R.string.gameNightDate) + formattedDate));
+       gameNightLocation.setText((getString(R.string.gameNightLocation) + location));
+       gameNightHost.setText((getString(R.string.gameNightHost) + host));
 
        cvSuggestions.setOnClickListener(v -> showSuggestions());
        cvVoting.setOnClickListener(v -> showVoting());

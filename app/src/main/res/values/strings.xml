@@ -38,14 +38,14 @@
     <string name="home">Home</string>
     <string name="messages">Messages</string>
     <string name="settings">Settings</string>
-    <string name="gameNightDate">"Game Night date: "</string>
-    <string name="gameNightLocation">"Game Night location: "</string>
-    <string name="gameNightHost">"Game Night host: "</string>
+    <string name="gameNightDate">"Game Night Date: "</string>
+    <string name="gameNightLocation">"Game Night Location: "</string>
+    <string name="gameNightHost">"Game Night Host: "</string>
     <string name="gameNightDetailsButton">View details</string>
     <string name="error_all_files_filled_out">Please fill in all fields</string>
     <string name="error_profile_creation_failed">Profile creation failed</string>
     <string name="error_name_already_taken">Name is already taken</string>
-    <string name="gameNightDetails">Game Night details</string>
+    <string name="gameNightDetails">Game Night Details</string>
     <string name="btnVoting">Voting</string>
     <string name="btnDinner">Dinner</string>
     <string name="btnRating">Rating</string>
@@ -77,7 +77,7 @@
     <string name="data_saved">Data saved</string>
     <string name="votingDescription">Click the thumbs icon to switch between like, neutral, and dislike</string>
     <string name="comment">Comment</string>
-    <string name="german">German\n</string>
+    <string name="german">German</string>
     <string name="italian">Italian</string>
     <string name="greek">Greek</string>
     <string name="turkish">Turkish</string>

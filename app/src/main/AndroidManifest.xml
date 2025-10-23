@@ -33,12 +33,12 @@
 
         <activity
             android:name=".CreateGameNightActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.BoardGamer"
            />
         <activity
             android:name=".SignUpActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.BoardGamer"
             android:windowSoftInputMode="adjustResize"
             />

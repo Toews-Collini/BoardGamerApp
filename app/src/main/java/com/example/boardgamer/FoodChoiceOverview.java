@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 
 
@@ -147,7 +148,7 @@ public class FoodChoiceOverview extends AppCompatActivity {
 
                 for (EssenWahl w : wahl) {
                     FoodChoiceOverview.CardItem cardItem = new CardItem();
-                    String foodName = id2name.get(w.essensrichtung_id);
+                    String foodName = localizeFoodKey(id2name.get(w.essensrichtung_id));
 
                     int foodChoicesIndex = (int) w.essensrichtung_id - 1;
                     foodChoices.set(foodChoicesIndex, foodChoices.get(foodChoicesIndex) + 1);
@@ -170,10 +171,10 @@ public class FoodChoiceOverview extends AppCompatActivity {
                 if (winners.size() == 1) {
                     int winnerIndex = winners.get(0);
                     long id = winnerIndex + 1L;
-                    String name = id2name.get(id);
-                    text = getString(R.string.majorityFoodChoice) + "\n" + name;
+                    String name = localizeFoodKey(id2name.get(id));
+                    text = getString(R.string.majorityFoodChoice) + " " + name;
                 } else {
-                    text = getString(R.string.majorityFoodChoice) + "\n" + getString(R.string.drawn);
+                    text = getString(R.string.majorityFoodChoice) + " " + getString(R.string.drawn);
                 }
 
                 String finalText = text;
@@ -191,6 +192,35 @@ public class FoodChoiceOverview extends AppCompatActivity {
             }
         });
     }
+
+    private String localizeFoodKey(String dbValue) {
+        if (dbValue == null) return "";
+        dbValue = dbValue.toLowerCase(Locale.ROOT);
+
+        switch (dbValue) {
+            case "deutsch":
+            case "german":
+                return getString(R.string.german);
+            case "italienisch":
+            case "italian":
+                return getString(R.string.italian);
+            case "griechisch":
+            case "greek":
+                return getString(R.string.greek);
+            case "türkisch":
+            case "turkish":
+                return getString(R.string.turkish);
+            case "indisch":
+            case "indian":
+                return getString(R.string.indian);
+            case "mexikanisch":
+            case "mexican":
+                return getString(R.string.mexican);
+            default:
+                return dbValue;
+        }
+    }
+
 
     private void renderSuggestion(String guestName, String foodChoice) {
         if (guestName == null || guestName.trim().isEmpty()) return;
