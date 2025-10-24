@@ -199,22 +199,16 @@ public class FoodChoiceOverview extends AppCompatActivity {
 
         switch (dbValue) {
             case "deutsch":
-            case "german":
                 return getString(R.string.german);
             case "italienisch":
-            case "italian":
                 return getString(R.string.italian);
             case "griechisch":
-            case "greek":
                 return getString(R.string.greek);
             case "türkisch":
-            case "turkish":
                 return getString(R.string.turkish);
             case "indisch":
-            case "indian":
                 return getString(R.string.indian);
             case "mexikanisch":
-            case "mexican":
                 return getString(R.string.mexican);
             default:
                 return dbValue;
