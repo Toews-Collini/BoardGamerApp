@@ -88,36 +88,53 @@ public class RatingActivity extends AppCompatActivity {
     private void loadRatings() {
         io.execute(() -> {
             try {
-                String ratingJson = supa.getRatingByIdAndPlayer(spieltermin_id, Spieler.appUserName);
-                SpieleabendRating[] spieleabend = gson.fromJson(JsonParser.parseString(ratingJson), SpieleabendRating[].class);
-                if (spieleabend == null || spieleabend.length == 0) {
+                final String ratingJson = supa.getRatingByIdAndPlayer(spieltermin_id, Spieler.appUserName);
+
+                SpieleabendRating[] spieleabend;
+                if (ratingJson == null || ratingJson.trim().isEmpty() || "null".equalsIgnoreCase(ratingJson.trim())) {
                     spieleabend = new SpieleabendRating[0];
+                } else {
+                    com.google.gson.JsonElement el = JsonParser.parseString(ratingJson);
+                    if (el == null || el.isJsonNull()) {
+                        spieleabend = new SpieleabendRating[0];
+                    } else if (el.isJsonArray()) {
+                        spieleabend = gson.fromJson(el, SpieleabendRating[].class);
+                    } else if (el.isJsonObject()) {
+                        SpieleabendRating single = gson.fromJson(el, SpieleabendRating.class);
+                        spieleabend = (single != null) ? new SpieleabendRating[]{ single } : new SpieleabendRating[0];
+                    } else {
+                        spieleabend = new SpieleabendRating[0];
+                    }
+                }
+
+                if (spieleabend == null || spieleabend.length == 0) {
                     com.google.gson.JsonArray rows = new com.google.gson.JsonArray();
                     com.google.gson.JsonObject row = new com.google.gson.JsonObject();
                     row.addProperty("spieltermin_id", spieltermin_id);
                     row.addProperty("spieler_name", Spieler.appUserName);
                     rows.add(row);
 
-                    supa.upsertMany(
-                            "Spieleabend",
-                            rows,
-                            "spieltermin_id,spieler_name"
-                    );
+                    supa.upsertMany("Spieleabend", rows, "spieltermin_id,spieler_name");
 
-                    if(loading_tries == 0) {
+                    if (loading_tries == 0) {
                         loading_tries++;
                         loadRatings();
                     }
+                    else {
+                        runOnUiThread(() ->
+                                Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show()
+                        );
+                    }
 
-                    Toast.makeText(this, R.string.loading_failed, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                int host_stars = spieleabend[0].gastgeber_sterne == null ? 0 : spieleabend[0].gastgeber_sterne;
-                String host_comment = spieleabend[0].gastgeber_kommentar == null ? "" : spieleabend[0].gastgeber_kommentar;
-                int food_stars = spieleabend[0].essen_sterne == null ? 0 : spieleabend[0].essen_sterne;
-                String food_comment = spieleabend[0].essen_kommentar == null ? "" : spieleabend[0].essen_kommentar;
-                int evening_stars = spieleabend[0].abend_sterne == null ? 0 : spieleabend[0].abend_sterne;
-                String evening_comment = spieleabend[0].abend_kommentar == null ? "" : spieleabend[0].abend_kommentar;
+
+                final int host_stars     = spieleabend[0].gastgeber_sterne == null ? 0  : spieleabend[0].gastgeber_sterne;
+                final String host_comment= spieleabend[0].gastgeber_kommentar == null ? "" : spieleabend[0].gastgeber_kommentar;
+                final int food_stars     = spieleabend[0].essen_sterne == null ? 0  : spieleabend[0].essen_sterne;
+                final String food_comment= spieleabend[0].essen_kommentar == null ? "" : spieleabend[0].essen_kommentar;
+                final int evening_stars  = spieleabend[0].abend_sterne == null ? 0  : spieleabend[0].abend_sterne;
+                final String evening_comment = spieleabend[0].abend_kommentar == null ? "" : spieleabend[0].abend_kommentar;
 
                 runOnUiThread(() -> {
                     rbHost.setRating(host_stars);
@@ -129,7 +146,9 @@ public class RatingActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
-                main.post(() -> Toast.makeText(this, "Fehler: " + e.getClass().getSimpleName(), Toast.LENGTH_LONG).show());
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Fehler: " + e.getClass().getSimpleName(), Toast.LENGTH_LONG).show()
+                );
                 android.util.Log.e("loadRatings", "Unerwarteter Fehler", e);
             }
         });
