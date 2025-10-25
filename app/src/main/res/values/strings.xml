@@ -2,10 +2,6 @@
     <string name="app_name">BoardGamer</string>
     <!-- TODO: Remove or change this placeholder text -->
 
-
-    <string name="next">next</string>
-    <string name="previous">previous</string>
-
     <string name="app_logo">App Logo</string>
     <string name="login">Login</string>
     <string name="welcomeText">Login and let\'s go!</string>
@@ -45,15 +41,15 @@
     <string name="error_all_files_filled_out">Please fill in all fields</string>
     <string name="error_profile_creation_failed">Profile creation failed</string>
     <string name="error_name_already_taken">Name is already taken</string>
-    <string name="gameNightDetails">Game Night Details</string>
+    <string name="gameNightDetails">Game Night details</string>
     <string name="btnVoting">Voting</string>
     <string name="btnDinner">Dinner</string>
     <string name="btnRating">Rating</string>
     <string name="btnSuggestions">Suggestions</string>
     <string name="add_suggestions">Add</string>
     <string name="newSuggestion">New suggestion</string>
-    <string name="suggestionText">Add your Game suggestions here</string>
-    <string name="votingText">Vote for Game suggestions here</string>
+    <string name="suggestionText">Add your game suggestions here</string>
+    <string name="votingText">Vote for game suggestions here</string>
     <string name="votingList">Voting list</string>
     <string name="thumbsUp">Thumbs up</string>
     <string name="neutral">Neutral</string>
@@ -84,7 +80,7 @@
     <string name="indian">Indian</string>
     <string name="mexican">Mexican</string>
     <string name="foodChoiceOverview">See your guests\' food choices</string>
-    <string name="foodReminder">Don\'t forget - Choose your favorite cuisine for the next game night.</string>
+    <string name="foodReminder">Don\'t forget - Choose your favorite cuisine for the next Game Gight.</string>
     <string name="guestName">Guest name:</string>
     <string name="guestChoice">Food choice:</string>
     <string name="messages_chat">Chat Messages</string>
@@ -93,4 +89,6 @@
     <string name="no_settings_available">No settings available</string>
     <string name="majorityFoodChoice">Majority food choice:</string>
     <string name="drawn">No identifiable majority</string>
+    <string name="next">next</string>
+    <string name="previous">previous</string>
 </resources>

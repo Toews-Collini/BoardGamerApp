@@ -55,18 +55,19 @@
         android:id="@+id/votingDescription"
         android:layout_width="328dp"
         android:layout_height="43dp"
+        android:layout_marginTop="20dp"
         android:text="@string/votingDescription"
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/votingText" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/votingRecyclerView"
-        android:layout_width="328dp"
-        android:layout_height="0dp"
+        android:layout_width="318dp"
+        android:layout_height="330dp"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/saveVoting"
         app:layout_constraintEnd_toEndOf="parent"
