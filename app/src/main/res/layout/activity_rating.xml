@@ -52,11 +52,12 @@
         android:id="@+id/formScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="24dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/ratings"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/ratings">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,20 +70,20 @@
                 android:id="@+id/card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="300dp"
                 android:layout_marginHorizontal="24dp"
                 android:background="@null"
                 android:elevation="0dp"
+                android:maxHeight="300dp"
                 android:outlineProvider="none"
                 android:padding="12dp"
                 android:stateListAnimator="@null"
                 app:cardBackgroundColor="@color/white"
-                app:strokeColor="@color/mid_blue"
-                app:strokeWidth="1dp"
-                app:layout_constraintTop_toBottomOf="@id/ratings"
                 app:layout_constraintBottom_toTopOf="@id/ratingButton"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/ratings"
+                app:strokeColor="@color/mid_blue"
+                app:strokeWidth="1dp">
 
                 <ScrollView
                     android:layout_width="match_parent"

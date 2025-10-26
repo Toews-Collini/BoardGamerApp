@@ -51,8 +51,8 @@
 
     <android.widget.ScrollView
         android:id="@+id/messages_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="411dp"
+        android:layout_height="380dp"
         android:layout_marginTop="12dp"
         app:layout_constraintBottom_toTopOf="@id/inputForm"
         app:layout_constraintEnd_toEndOf="parent"
